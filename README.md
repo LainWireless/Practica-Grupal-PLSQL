@@ -8,7 +8,7 @@ Se adjuntan los siguientes cinco documentos:
 
 - b) Esquema de las tablas que tendréis que utilizar (Fase 2)
 
-- c) Dos scripts para la creación de las tablas y la inserción de registros tanto en ORACLE como en Postgres (pueden contener errores)
+- c) Dos scripts para la creación de las tablas y la inserción de registros tanto en ORACLE como en Postgres (los originales contenían errores, pero ya están solucionados)
 
 - d) El enunciado real de la práctica. (Fase 4)
 
