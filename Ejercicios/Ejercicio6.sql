@@ -51,13 +51,37 @@ BEGIN
         IF :NEW.FECHA_INICIO > vcargos.info_historial_cargos(INDICE2).FECHA_INICIO AND :NEW.FECHA_FIN < vcargos.info_historial_cargos(INDICE2).FECHA_FIN THEN
             RAISE_APPLICATION_ERROR(-20001, 'Los propietarios solo pueden ocupar un cargo en la misma comunidad');
         END IF; 
-    ELSIF :NEW.CODCOMUNIDAD = :OLD.CODCOMUNIDAD AND :NEW.DNI = :OLD.DNI THEN
-        IF :NEW.FECHA_INICIO > :OLD.FECHA_INICIO AND :NEW.FECHA_FIN < :OLD.FECHA_FIN THEN
-            RAISE_APPLICATION_ERROR(-20001, 'Los propietarios solo pueden ocupar un cargo en la misma comunidad');
-        END IF;
+--    ELSIF :NEW.CODCOMUNIDAD = :OLD.CODCOMUNIDAD AND :NEW.DNI = :OLD.DNI THEN
+--        IF :NEW.FECHA_INICIO > :OLD.FECHA_INICIO AND :NEW.FECHA_FIN < :OLD.FECHA_FIN THEN
+--            RAISE_APPLICATION_ERROR(-20001, 'Los propietarios solo pueden ocupar un cargo en la misma comunidad');
+--        END IF;
 	END IF;
     INDICE2 := INDICE2 + 1;
 END;
 /
 
 
+--Pruebas
+
+INSERT INTO HISTORIAL_CARGOS
+VALUES('Presidente','AAAA1','49027387N',
+TO_DATE('2018/01/15','YYYY/MM/DD'),TO_DATE('2019/01/15','YYYY/MM/DD'));
+INSERT INTO HISTORIAL_CARGOS
+VALUES('vocal','AAAA1','49027387N',
+TO_DATE('2018/01/15','YYYY/MM/DD'),TO_DATE('2019/01/15','YYYY/MM/DD'));
+
+delete from HISTORIAL_CARGOS where FECHA_INICIO = TO_DATE('2018/01/15','YYYY/MM/DD');
+
+select * from HISTORIAL_CARGOS;
+
+drop TRIGGER Control_cargos;
+
+BEGIN
+    FOR v_cur in vcargos.info_historial_cargos.FIRST.. vcargos.info_historial_cargos.LAST LOOP
+        dbms_output.put_line(vcargos.info_historial_cargos(v_cur).CODCOMUNIDAD);
+        dbms_output.put_line(vcargos.info_historial_cargos(v_cur).DNI);
+        dbms_output.put_line(vcargos.info_historial_cargos(v_cur).FECHA_INICIO);
+        dbms_output.put_line(vcargos.info_historial_cargos(v_cur).FECHA_FIN);
+        dbms_output.put_line(' ');
+    END LOOP;
+END;
