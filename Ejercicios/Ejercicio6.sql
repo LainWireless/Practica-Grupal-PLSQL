@@ -40,3 +40,24 @@ BEGIN
 END;
 /
 
+--Trigger para controlar los cargos
+CREATE OR REPLACE TRIGGER Control_cargos
+BEFORE INSERT OR UPDATE ON HISTORIAL_CARGOS
+FOR EACH ROW
+DECLARE
+    INDICE2 NUMBER:=0;
+BEGIN
+	IF :NEW.CODCOMUNIDAD = vcargos.info_historial_cargos(INDICE2).CODCOMUNIDAD AND :NEW.DNI = vcargos.info_historial_cargos(INDICE2).DNI THEN
+        IF :NEW.FECHA_INICIO > vcargos.info_historial_cargos(INDICE2).FECHA_INICIO AND :NEW.FECHA_FIN < vcargos.info_historial_cargos(INDICE2).FECHA_FIN THEN
+            RAISE_APPLICATION_ERROR(-20001, 'Los propietarios solo pueden ocupar un cargo en la misma comunidad');
+        END IF; 
+    ELSIF :NEW.CODCOMUNIDAD = :OLD.CODCOMUNIDAD AND :NEW.DNI = :OLD.DNI THEN
+        IF :NEW.FECHA_INICIO > :OLD.FECHA_INICIO AND :NEW.FECHA_FIN < :OLD.FECHA_FIN THEN
+            RAISE_APPLICATION_ERROR(-20001, 'Los propietarios solo pueden ocupar un cargo en la misma comunidad');
+        END IF;
+	END IF;
+    INDICE2 := INDICE2 + 1;
+END;
+/
+
+
