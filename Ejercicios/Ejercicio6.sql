@@ -12,7 +12,6 @@ TYPE columnascargos IS RECORD
 (
     CODCOMUNIDAD VARCHAR2(8),
     DNI VARCHAR2(9),
-    FECHA_INICIO DATE,
     FECHA_FIN DATE
 );
 
@@ -33,7 +32,6 @@ BEGIN
     FOR v_cur in info_cargos LOOP
         vcargos.info_historial_cargos(INDICE).CODCOMUNIDAD := v_cur.CODCOMUNIDAD;
         vcargos.info_historial_cargos(INDICE).DNI := v_cur.DNI;
-        vcargos.info_historial_cargos(INDICE).FECHA_INICIO := v_cur.FECHA_INICIO;
         vcargos.info_historial_cargos(INDICE).FECHA_FIN := v_cur.FECHA_FIN;
         INDICE := INDICE + 1;
     END LOOP;
@@ -47,14 +45,10 @@ FOR EACH ROW
 DECLARE
     INDICE2 NUMBER:=0;
 BEGIN
-	IF :NEW.CODCOMUNIDAD = vcargos.info_historial_cargos(INDICE2).CODCOMUNIDAD AND :NEW.DNI = vcargos.info_historial_cargos(INDICE2).DNI THEN
-        IF :NEW.FECHA_INICIO >= vcargos.info_historial_cargos(INDICE2).FECHA_INICIO AND :NEW.FECHA_FIN <= vcargos.info_historial_cargos(INDICE2).FECHA_FIN THEN
-            RAISE_APPLICATION_ERROR(-20001, 'Los propietarios solo pueden ocupar un cargo en la misma comunidad');
-        END IF; 
-    ELSIF :NEW.CODCOMUNIDAD = :OLD.CODCOMUNIDAD AND :NEW.DNI = :OLD.DNI THEN
-        IF :NEW.FECHA_INICIO >= :OLD.FECHA_INICIO AND :NEW.FECHA_FIN <= :OLD.FECHA_FIN THEN
-            RAISE_APPLICATION_ERROR(-20001, 'Los propietarios solo pueden ocupar un cargo en la misma comunidad');
-        END IF;
+	IF :NEW.CODCOMUNIDAD = vcargos.info_historial_cargos(INDICE2).CODCOMUNIDAD AND :NEW.DNI = vcargos.info_historial_cargos(INDICE2).DNI AND :NEW.FECHA_INICIO <= vcargos.info_historial_cargos(INDICE2).FECHA_FIN THEN
+        RAISE_APPLICATION_ERROR(-20001, 'Los propietarios solo pueden ocupar un cargo en la misma comunidad');
+    ELSIF :NEW.CODCOMUNIDAD = :OLD.CODCOMUNIDAD AND :NEW.DNI = :OLD.DNI AND :NEW.FECHA_INICIO <= :OLD.FECHA_FIN THEN
+        RAISE_APPLICATION_ERROR(-20001, 'Los propietarios solo pueden ocupar un cargo en la misma comunidad');
 	END IF;
     INDICE2 := INDICE2 + 1;
 END;
@@ -70,9 +64,9 @@ INSERT INTO HISTORIAL_CARGOS
 VALUES('vocal','AAAA1','49027387N',
 TO_DATE('2017/01/15','YYYY/MM/DD'),TO_DATE('2020/01/15','YYYY/MM/DD'));
 
+delete from HISTORIAL_CARGOS;
 
-
-delete from HISTORIAL_CARGOS where FECHA_INICIO = TO_DATE('2018/01/15','YYYY/MM/DD');
+delete from HISTORIAL_CARGOS where FECHA_FIN = TO_DATE('2019/01/15','YYYY/MM/DD');
 
 select * from HISTORIAL_CARGOS;
 
@@ -82,7 +76,6 @@ BEGIN
     FOR v_cur in vcargos.info_historial_cargos.FIRST.. vcargos.info_historial_cargos.LAST LOOP
         dbms_output.put_line(vcargos.info_historial_cargos(v_cur).CODCOMUNIDAD);
         dbms_output.put_line(vcargos.info_historial_cargos(v_cur).DNI);
-        dbms_output.put_line(vcargos.info_historial_cargos(v_cur).FECHA_INICIO);
         dbms_output.put_line(vcargos.info_historial_cargos(v_cur).FECHA_FIN);
         dbms_output.put_line(' ');
     END LOOP;
