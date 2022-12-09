@@ -48,13 +48,13 @@ DECLARE
     INDICE2 NUMBER:=0;
 BEGIN
 	IF :NEW.CODCOMUNIDAD = vcargos.info_historial_cargos(INDICE2).CODCOMUNIDAD AND :NEW.DNI = vcargos.info_historial_cargos(INDICE2).DNI THEN
-        IF :NEW.FECHA_INICIO > vcargos.info_historial_cargos(INDICE2).FECHA_INICIO AND :NEW.FECHA_FIN < vcargos.info_historial_cargos(INDICE2).FECHA_FIN THEN
+        IF :NEW.FECHA_INICIO >= vcargos.info_historial_cargos(INDICE2).FECHA_INICIO AND :NEW.FECHA_FIN <= vcargos.info_historial_cargos(INDICE2).FECHA_FIN THEN
             RAISE_APPLICATION_ERROR(-20001, 'Los propietarios solo pueden ocupar un cargo en la misma comunidad');
         END IF; 
---    ELSIF :NEW.CODCOMUNIDAD = :OLD.CODCOMUNIDAD AND :NEW.DNI = :OLD.DNI THEN
---        IF :NEW.FECHA_INICIO > :OLD.FECHA_INICIO AND :NEW.FECHA_FIN < :OLD.FECHA_FIN THEN
---            RAISE_APPLICATION_ERROR(-20001, 'Los propietarios solo pueden ocupar un cargo en la misma comunidad');
---        END IF;
+    ELSIF :NEW.CODCOMUNIDAD = :OLD.CODCOMUNIDAD AND :NEW.DNI = :OLD.DNI THEN
+        IF :NEW.FECHA_INICIO >= :OLD.FECHA_INICIO AND :NEW.FECHA_FIN <= :OLD.FECHA_FIN THEN
+            RAISE_APPLICATION_ERROR(-20001, 'Los propietarios solo pueden ocupar un cargo en la misma comunidad');
+        END IF;
 	END IF;
     INDICE2 := INDICE2 + 1;
 END;
@@ -68,7 +68,9 @@ VALUES('Presidente','AAAA1','49027387N',
 TO_DATE('2018/01/15','YYYY/MM/DD'),TO_DATE('2019/01/15','YYYY/MM/DD'));
 INSERT INTO HISTORIAL_CARGOS
 VALUES('vocal','AAAA1','49027387N',
-TO_DATE('2018/01/15','YYYY/MM/DD'),TO_DATE('2019/01/15','YYYY/MM/DD'));
+TO_DATE('2017/01/15','YYYY/MM/DD'),TO_DATE('2020/01/15','YYYY/MM/DD'));
+
+
 
 delete from HISTORIAL_CARGOS where FECHA_INICIO = TO_DATE('2018/01/15','YYYY/MM/DD');
 
