@@ -1,16 +1,4 @@
---drop table viviendas;
---drop table recibos_cuotas;
---drop table oficinas;
---drop table locales;
---drop table inquilinos;
---drop table horarios_apertura;
---drop table historial_cargos;
---drop table contratos_de_mandato;
---drop table administradores;
---drop table propiedades;
---drop table propietarios;
---drop table comunidades;
-
+--CREACIÓN DE TABLAS-----------------------------------------------------------------------------------------------------
 
 CREATE TABLE comunidades
 (
@@ -155,7 +143,11 @@ CONSTRAINT fk_vipropiedad FOREIGN KEY (codpropiedad,codcomunidad) REFERENCES pro
 );
 
 
---COMUNIDADES
+--INSERCCIONES-----------------------------------------------------------------------------------------------------------
+
+
+--Tabla comunidades
+
 INSERT INTO comunidades VALUES('AAAA1','CV.Montecillos 13','Plaza Bertendona,13 ','Dos Hermanas(Sevilla)','41702');
 INSERT INTO comunidades VALUES('AAAA2','CV.Anselmo','Plaza Constitución,12','Rota(Cadiz)','11520');
 INSERT INTO comunidades VALUES('AAAA3','CV.Doñana','Plaza Doñana,2','Almonte(Huelva)','21750');
@@ -163,7 +155,26 @@ INSERT INTO comunidades VALUES('AAAA4','CV.Los Naranjos 2','Calle Cuartel,6 ','A
 INSERT INTO comunidades VALUES('AAAA5','CV.Los Principes 4','Avda Reyes Catolicos,7 ','Dos Hermanas(Sevilla)','41702');
 
 
---PROPIETARIOS
+--Tabla administradores
+
+INSERT INTO administradores VALUES('472','52801993L','Elisa','Rodriguez Sempere');
+INSERT INTO administradores VALUES('812','27449907M','José Manuel','Aguilar Aguilar');
+INSERT INTO administradores VALUES('1186','23229790C','Carlos','Rivas Valero');
+INSERT INTO administradores VALUES('389','23229791T','Tomás','Merino Juárez');
+
+
+--Tabla contratos_de_mandato
+
+INSERT INTO contratos_de_mandato VALUES('AA0001','472',TO_DATE('2016/01/15','YYYY/MM/DD'),TO_DATE('2017/01/15','YYYY/MM/DD'),420,'AAAA1');
+INSERT INTO contratos_de_mandato VALUES('AA0002','812',TO_DATE('2016/01/05','YYYY/MM/DD'),TO_DATE('2017/01/05','YYYY/MM/DD'),550,'AAAA2');
+INSERT INTO contratos_de_mandato VALUES('AA0003','472',TO_DATE('2016/01/25','YYYY/MM/DD'),TO_DATE('2017/01/25','YYYY/MM/DD'),420,'AAAA5');
+INSERT INTO contratos_de_mandato VALUES('AA0004','1186',TO_DATE('2016/01/12','YYYY/MM/DD'),TO_DATE('2017/01/12','YYYY/MM/DD'),720,'AAAA3');
+INSERT INTO contratos_de_mandato VALUES('AA0005','472',TO_DATE('2016/02/05','YYYY/MM/DD'),TO_DATE('2017/02/05','YYYY/MM/DD'),400,'AAAA4');
+INSERT INTO contratos_de_mandato VALUES('AA0006','389',TO_DATE('2016/02/07','YYYY/MM/DD'),TO_DATE('2017/02/07','YYYY/MM/DD'),400,'AAAA4');
+
+
+--Tabla propietarios
+
 INSERT INTO propietarios VALUES('49027387N','Jose Manuel','Carmona Gotan','Plaza Bertendona,13 Bajo A','Dos Hermanas','Sevilla','607292602');
 INSERT INTO propietarios VALUES('50765614Z','Álvaro','Acosta Gonzalez','Plaza Bertendona,13 Bajo B','Dos Hermanas','Sevilla','602272302');
 INSERT INTO propietarios VALUES('10880946Z','Mª Isabel','Alonso Paz','Plaza Bertendona,13 1ºA','Dos Hermanas','Sevilla','802272304');
@@ -186,46 +197,8 @@ INSERT INTO propietarios VALUES('K6033994J','Leif Erikson','Cayo Ventura','Calle
 INSERT INTO propietarios VALUES('K6022994B','Luisa','Sanchez Sanchez','Calle Cuartel,6 Bajo A','Alcolea','Cordoba','601142302');
 
 
---PROPIEDADES
-INSERT INTO propiedades VALUES('AAAA1','0001','49027387N','13','Bajo','A',7.750);
-INSERT INTO propiedades VALUES('AAAA1','0002','50765614Z','13','Bajo','B',10.50);
-INSERT INTO propiedades VALUES('AAAA1','0003','10880946Z','13','1','A',25.75);
-INSERT INTO propiedades VALUES('AAAA1','0004','23293294K','13','1º','B',7.750);
-INSERT INTO propiedades VALUES('AAAA1','0005','79074112J','13','1º','C',7.750);
-INSERT INTO propiedades VALUES('AAAA1','0006','16593504Q','13','1º','D',7.750);
-INSERT INTO propiedades VALUES('AAAA2','0001','52349896X','12','Bajo','A',7.750);
-INSERT INTO propiedades VALUES('AAAA2','0002','09291497A','12','Bajo','B',12.45);
-INSERT INTO propiedades VALUES('AAAA2','0003','X4945396M','12','1º','A',7.750);
-INSERT INTO propiedades VALUES('AAAA2','0004','11830895V','12','1º','B',7.750);
-INSERT INTO propiedades VALUES('AAAA2','0005','46866917R','12','1º','C',7.750);
-INSERT INTO propiedades VALUES('AAAA3','0001','71441529X','2','1º','A',7.750);
-INSERT INTO propiedades VALUES('AAAA3','0002','53042369E','2','1º','B',75.00);
-INSERT INTO propiedades VALUES('AAAA3','0003','71128255L','2','1º','C',7.750);
-INSERT INTO propiedades VALUES('AAAA3','0004','50863298V','2','1º','D',8.50);
-INSERT INTO propiedades VALUES('AAAA4','0001','29201838A','6','1º','A',8.50);
-INSERT INTO propiedades VALUES('AAAA4','0002','51945369F','6','1º','B',7.750);
-INSERT INTO propiedades VALUES('AAAA4','0003','23788215M','6','1º','C',7.750);
-INSERT INTO propiedades VALUES('AAAA4','0004','K6033994J','6','1º','D',80.75);
-INSERT INTO propiedades VALUES('AAAA4','0005','K6022994B','6','1º','D',5.50);
+--Tabla historial_cargos
 
-
---ADMINISTRADORES
-INSERT INTO administradores VALUES('472','52801993L','Elisa','Rodriguez Sempere');
-INSERT INTO administradores VALUES('812','27449907M','José Manuel','Aguilar Aguilar');
-INSERT INTO administradores VALUES('1186','23229790C','Carlos','Rivas Valero');
-INSERT INTO administradores VALUES('389','23229791T','Tomás','Merino Juárez');
-
-
---CONTRATOS_DE_MANDATOS
-INSERT INTO contratos_de_mandato VALUES('AA0001','472',TO_DATE('2016/01/15','YYYY/MM/DD'),TO_DATE('2017/01/15','YYYY/MM/DD'),420,'AAAA1');
-INSERT INTO contratos_de_mandato VALUES('AA0002','812',TO_DATE('2016/01/05','YYYY/MM/DD'),TO_DATE('2017/01/05','YYYY/MM/DD'),550,'AAAA2');
-INSERT INTO contratos_de_mandato VALUES('AA0003','472',TO_DATE('2016/01/25','YYYY/MM/DD'),TO_DATE('2017/01/25','YYYY/MM/DD'),420,'AAAA5');
-INSERT INTO contratos_de_mandato VALUES('AA0004','1186',TO_DATE('2016/01/12','YYYY/MM/DD'),TO_DATE('2017/01/12','YYYY/MM/DD'),720,'AAAA3');
-INSERT INTO contratos_de_mandato VALUES('AA0005','472',TO_DATE('2016/02/05','YYYY/MM/DD'),TO_DATE('2017/02/05','YYYY/MM/DD'),400,'AAAA4');
-INSERT INTO contratos_de_mandato VALUES('AA0006','389',TO_DATE('2016/02/07','YYYY/MM/DD'),TO_DATE('2017/02/07','YYYY/MM/DD'),400,'AAAA4');
-
-
---HISTORIAL_CARGOS
 INSERT INTO historial_cargos VALUES('Presidente','AAAA1','49027387N',TO_DATE('2016/01/15','YYYY/MM/DD'),TO_DATE('2017/01/15','YYYY/MM/DD'));
 INSERT INTO historial_cargos VALUES('Vicepresidente','AAAA1','50765614Z',TO_DATE('2016/01/15','YYYY/MM/DD'),TO_DATE('2017/01/15','YYYY/MM/DD'));
 INSERT INTO historial_cargos VALUES('Vocal','AAAA1','10880946Z',TO_DATE('2016/01/15','YYYY/MM/DD'),TO_DATE('2017/01/15','YYYY/MM/DD'));
@@ -240,53 +213,8 @@ INSERT INTO historial_cargos VALUES('Vocal','AAAA3','71128255L',TO_DATE('2016/01
 INSERT INTO historial_cargos VALUES('Vocal','AAAA3','50863298V',TO_DATE('2016/01/12','YYYY/MM/DD'),TO_DATE('2017/01/12','YYYY/MM/DD'));
 
 
---HORARIOS_APERTURA
-INSERT INTO horarios_apertura VALUES('AAAA1','0001','Lunes',TO_DATE('08:00','HH24:MI'),TO_DATE('18:00','HH24:MI'));
-INSERT INTO horarios_apertura VALUES('AAAA1','0001','Martes',TO_DATE('08:00','HH24:MI'),TO_DATE('18:00','HH24:MI'));
-INSERT INTO horarios_apertura VALUES('AAAA1','0001','Miercoles',TO_DATE('08:00','HH24:MI'),TO_DATE('18:00','HH24:MI'));
-INSERT INTO horarios_apertura VALUES('AAAA1','0001','Jueves',TO_DATE('08:00','HH24:MI'),TO_DATE('18:00','HH24:MI'));
-INSERT INTO horarios_apertura VALUES('AAAA1','0001','Viernes',TO_DATE('08:00','HH24:MI'),TO_DATE('14:00','HH24:MI'));
-INSERT INTO horarios_apertura VALUES('AAAA2','0001','Lunes',TO_DATE('09:30','HH24:MI'),TO_DATE('17:30','HH24:MI'));
-INSERT INTO horarios_apertura VALUES('AAAA2','0001','Martes',TO_DATE('09:30','HH24:MI'),TO_DATE('17:30','HH24:MI'));
-INSERT INTO horarios_apertura VALUES('AAAA2','0001','Miercoles',TO_DATE('09:30','HH24:MI'),TO_DATE('17:30','HH24:MI'));
-INSERT INTO horarios_apertura VALUES('AAAA2','0001','Jueves',TO_DATE('09:30','HH24:MI'),TO_DATE('17:30','HH24:MI'));
-INSERT INTO horarios_apertura VALUES('AAAA2','0001','Viernes',TO_DATE('09:30','HH24:MI'),TO_DATE('14:30','HH24:MI'));
-INSERT INTO horarios_apertura VALUES('AAAA3','0001','Lunes',TO_DATE('10:00','HH24:MI'),TO_DATE('20:00','HH24:MI'));
-INSERT INTO horarios_apertura VALUES('AAAA3','0001','Martes',TO_DATE('10:00','HH24:MI'),TO_DATE('20:00','HH24:MI'));
-INSERT INTO horarios_apertura VALUES('AAAA3','0001','Miercoles',TO_DATE('10:00','HH24:MI'),TO_DATE('20:00','HH24:MI'));
-INSERT INTO horarios_apertura VALUES('AAAA3','0001','Jueves',TO_DATE('10:00','HH24:MI'),TO_DATE('20:00','HH24:MI'));
-INSERT INTO horarios_apertura VALUES('AAAA3','0001','Viernes',TO_DATE('10:00','HH24:MI'),TO_DATE('20:00','HH24:MI'));
-INSERT INTO horarios_apertura VALUES('AAAA3','0001','Sabado',TO_DATE('09:00','HH24:MI'),TO_DATE('13:00','HH24:MI'));
+--Tabla recibos_cuotas
 
-
---INQUILINOS
-INSERT INTO inquilinos VALUES('22421953N','0003','AAAA2','ANTONIA ','VIDAL PORRAS','639901719');
-INSERT INTO inquilinos VALUES('22456294Z','0004','AAAA2','JOSE ANTONIO','SANCHEZ MOLINA','649496996');
-INSERT INTO inquilinos VALUES('27440525F','0003','AAAA1','FUENSANTA','RUIZ MARTINEZ','749486956');
-INSERT INTO inquilinos VALUES('27447854E','0004','AAAA1','FERNANDO','ROMAN LAPUENTE','835436995');
-INSERT INTO inquilinos VALUES('22478873F','0003','AAAA3','MANUEL','NICOLAS GARCIA','669456006');
-INSERT INTO inquilinos VALUES('22918037D','0004','AAAA3','JUANA','MORENZA MATEO','774406190');
-
-
---LOCALES
-INSERT INTO locales VALUES('0001','AAAA3');
-INSERT INTO locales VALUES('0001','AAAA1');
-INSERT INTO locales VALUES('0001','AAAA2');
-INSERT INTO locales VALUES('0002','AAAA1');
-
-
---OFICINAS
-INSERT INTO oficinas VALUES('0006','AAAA1','Arquitectura');
-INSERT INTO oficinas VALUES('0002','AAAA2','Banco');
-INSERT INTO oficinas VALUES('0002','AAAA3','Arquitectura');
-INSERT INTO oficinas VALUES('0001','AAAA4','Arquitectura');
-INSERT INTO oficinas VALUES('0002','AAAA4','Administracion Fincas');
-INSERT INTO oficinas VALUES('0003','AAAA4','Diseño Grafico');
-INSERT INTO oficinas VALUES('0004','AAAA4','Empleo');
-INSERT INTO oficinas VALUES('0005','AAAA4','Banco');
-
-
---RECIBOS_CUOTAS
 INSERT INTO recibos_cuotas VALUES('0001','AAAA1','50765614Z',TO_DATE('2016/02/15','YYYY/MM/DD'),25,'Si');
 INSERT INTO recibos_cuotas VALUES('0002','AAAA1','10880946Z',TO_DATE('2016/02/15','YYYY/MM/DD'),25,'Si');
 INSERT INTO recibos_cuotas VALUES('0003','AAAA1','23293294K',TO_DATE('2016/02/15','YYYY/MM/DD'),25,'No');
@@ -310,7 +238,82 @@ INSERT INTO recibos_cuotas VALUES('0005','AAAA2','52349896X',TO_DATE('2016/04/05
 INSERT INTO recibos_cuotas VALUES('0006','AAAA2','09291497A',TO_DATE('2016/04/05','YYYY/MM/DD'),35,'No');
 
 
---VIVIENDAS
+--Tabla propiedades
+
+INSERT INTO propiedades VALUES('AAAA1','0001','49027387N','13','Bajo','A',7.750);
+INSERT INTO propiedades VALUES('AAAA1','0002','50765614Z','13','Bajo','B',10.50);
+INSERT INTO propiedades VALUES('AAAA1','0003','10880946Z','13','1','A',25.75);
+INSERT INTO propiedades VALUES('AAAA1','0004','23293294K','13','1º','B',7.750);
+INSERT INTO propiedades VALUES('AAAA1','0005','79074112J','13','1º','C',7.750);
+INSERT INTO propiedades VALUES('AAAA1','0006','16593504Q','13','1º','D',7.750);
+INSERT INTO propiedades VALUES('AAAA2','0001','52349896X','12','Bajo','A',7.750);
+INSERT INTO propiedades VALUES('AAAA2','0002','09291497A','12','Bajo','B',12.45);
+INSERT INTO propiedades VALUES('AAAA2','0003','X4945396M','12','1º','A',7.750);
+INSERT INTO propiedades VALUES('AAAA2','0004','11830895V','12','1º','B',7.750);
+INSERT INTO propiedades VALUES('AAAA2','0005','46866917R','12','1º','C',7.750);
+INSERT INTO propiedades VALUES('AAAA3','0001','71441529X','2','1º','A',7.750);
+INSERT INTO propiedades VALUES('AAAA3','0002','53042369E','2','1º','B',75.00);
+INSERT INTO propiedades VALUES('AAAA3','0003','71128255L','2','1º','C',7.750);
+INSERT INTO propiedades VALUES('AAAA3','0004','50863298V','2','1º','D',8.50);
+INSERT INTO propiedades VALUES('AAAA4','0001','29201838A','6','1º','A',8.50);
+INSERT INTO propiedades VALUES('AAAA4','0002','51945369F','6','1º','B',7.750);
+INSERT INTO propiedades VALUES('AAAA4','0003','23788215M','6','1º','C',7.750);
+INSERT INTO propiedades VALUES('AAAA4','0004','K6033994J','6','1º','D',80.75);
+INSERT INTO propiedades VALUES('AAAA4','0005','K6022994B','6','1º','D',5.50);
+
+
+--Tabla inquilinos
+
+INSERT INTO inquilinos VALUES('22421953N','0003','AAAA2','ANTONIA ','VIDAL PORRAS','639901719');
+INSERT INTO inquilinos VALUES('22456294Z','0004','AAAA2','JOSE ANTONIO','SANCHEZ MOLINA','649496996');
+INSERT INTO inquilinos VALUES('27440525F','0003','AAAA1','FUENSANTA','RUIZ MARTINEZ','749486956');
+INSERT INTO inquilinos VALUES('27447854E','0004','AAAA1','FERNANDO','ROMAN LAPUENTE','835436995');
+INSERT INTO inquilinos VALUES('22478873F','0003','AAAA3','MANUEL','NICOLAS GARCIA','669456006');
+INSERT INTO inquilinos VALUES('22918037D','0004','AAAA3','JUANA','MORENZA MATEO','774406190');
+
+
+--Tabla oficinas
+
+INSERT INTO oficinas VALUES('0006','AAAA1','Arquitectura');
+INSERT INTO oficinas VALUES('0002','AAAA2','Banco');
+INSERT INTO oficinas VALUES('0002','AAAA3','Arquitectura');
+INSERT INTO oficinas VALUES('0001','AAAA4','Arquitectura');
+INSERT INTO oficinas VALUES('0002','AAAA4','Administracion Fincas');
+INSERT INTO oficinas VALUES('0003','AAAA4','Diseño Grafico');
+INSERT INTO oficinas VALUES('0004','AAAA4','Empleo');
+INSERT INTO oficinas VALUES('0005','AAAA4','Banco');
+
+
+--Tabla locales
+
+INSERT INTO locales VALUES('0001','AAAA3');
+INSERT INTO locales VALUES('0001','AAAA1');
+INSERT INTO locales VALUES('0001','AAAA2');
+INSERT INTO locales VALUES('0002','AAAA1');
+
+
+--Tabla horarios_apertura
+
+INSERT INTO horarios_apertura VALUES('AAAA1','0001','Lunes',TO_DATE('08:00','HH24:MI'),TO_DATE('18:00','HH24:MI'));
+INSERT INTO horarios_apertura VALUES('AAAA1','0001','Martes',TO_DATE('08:00','HH24:MI'),TO_DATE('18:00','HH24:MI'));
+INSERT INTO horarios_apertura VALUES('AAAA1','0001','Miercoles',TO_DATE('08:00','HH24:MI'),TO_DATE('18:00','HH24:MI'));
+INSERT INTO horarios_apertura VALUES('AAAA1','0001','Jueves',TO_DATE('08:00','HH24:MI'),TO_DATE('18:00','HH24:MI'));
+INSERT INTO horarios_apertura VALUES('AAAA1','0001','Viernes',TO_DATE('08:00','HH24:MI'),TO_DATE('14:00','HH24:MI'));
+INSERT INTO horarios_apertura VALUES('AAAA2','0001','Lunes',TO_DATE('09:30','HH24:MI'),TO_DATE('17:30','HH24:MI'));
+INSERT INTO horarios_apertura VALUES('AAAA2','0001','Martes',TO_DATE('09:30','HH24:MI'),TO_DATE('17:30','HH24:MI'));
+INSERT INTO horarios_apertura VALUES('AAAA2','0001','Miercoles',TO_DATE('09:30','HH24:MI'),TO_DATE('17:30','HH24:MI'));
+INSERT INTO horarios_apertura VALUES('AAAA2','0001','Jueves',TO_DATE('09:30','HH24:MI'),TO_DATE('17:30','HH24:MI'));
+INSERT INTO horarios_apertura VALUES('AAAA2','0001','Viernes',TO_DATE('09:30','HH24:MI'),TO_DATE('14:30','HH24:MI'));
+INSERT INTO horarios_apertura VALUES('AAAA3','0001','Lunes',TO_DATE('10:00','HH24:MI'),TO_DATE('20:00','HH24:MI'));
+INSERT INTO horarios_apertura VALUES('AAAA3','0001','Martes',TO_DATE('10:00','HH24:MI'),TO_DATE('20:00','HH24:MI'));
+INSERT INTO horarios_apertura VALUES('AAAA3','0001','Miercoles',TO_DATE('10:00','HH24:MI'),TO_DATE('20:00','HH24:MI'));
+INSERT INTO horarios_apertura VALUES('AAAA3','0001','Jueves',TO_DATE('10:00','HH24:MI'),TO_DATE('20:00','HH24:MI'));
+INSERT INTO horarios_apertura VALUES('AAAA3','0001','Viernes',TO_DATE('10:00','HH24:MI'),TO_DATE('20:00','HH24:MI'));
+INSERT INTO horarios_apertura VALUES('AAAA3','0001','Sabado',TO_DATE('09:00','HH24:MI'),TO_DATE('13:00','HH24:MI'));
+
+
+--Tabla viviendas
+
 INSERT INTO viviendas VALUES('0003','AAAA1','3');
 INSERT INTO viviendas VALUES('0003','AAAA2','4');
 INSERT INTO viviendas VALUES('0003','AAAA3','2');
