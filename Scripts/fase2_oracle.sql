@@ -145,7 +145,6 @@ CONSTRAINT fk_vipropiedad FOREIGN KEY (codpropiedad,codcomunidad) REFERENCES pro
 
 --INSERCCIONES-----------------------------------------------------------------------------------------------------------
 
-
 --Tabla comunidades
 
 INSERT INTO comunidades VALUES('AAAA1','CV.Montecillos 13','Plaza Bertendona,13 ','Dos Hermanas(Sevilla)','41702');
