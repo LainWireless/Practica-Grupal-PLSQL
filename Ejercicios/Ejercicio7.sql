@@ -57,14 +57,15 @@ END;
 /
 
 --Función para comprobar rangos de fechas
-create or replace FUNCTION comprobar_fecha_mandatos(p_fecha in date, INDICE2 in NUMBER)
+create or replace FUNCTION comprobar_fecha_mandatos(p_fecha in date,INDICE2 in NUMBER,p_colegiado in VARCHAR2,p_comunidad in VARCHAR2)
 RETURN NUMBER
 IS
 	v_rfecha NUMBER;
 BEGIN
     select 1 into v_rfecha from dual 
     WHERE p_fecha BETWEEN vmandatos.info_contratos_mandatos(INDICE2).fecha_inicio AND
-    vmandatos.info_contratos_mandatos(INDICE2).fecha_final;
+    vmandatos.info_contratos_mandatos(INDICE2).fecha_final AND vmandatos.info_contratos_mandatos(INDICE2).numcolegiado = p_colegiado 
+    and vmandatos.info_contratos_mandatos(INDICE2).codcomunidad = p_comunidad;
 	if v_rfecha = 1 THEN
         RETURN v_rfecha;
     ELSE
@@ -77,7 +78,7 @@ END;
 DECLARE
     v_sfecha NUMBER;
 BEGIN
-    select comprobar_fecha_mandatos(TO_DATE('25/02/2016', 'DD/MM/YYYY'),0) into v_sfecha from dual;
+    select comprobar_fecha_mandatos(TO_DATE('25/02/2016', 'DD/MM/YYYY'),0,'472','AAAA1') into v_sfecha from dual;
     dbms_output.put_line(v_sfecha);
 end;
 
@@ -89,9 +90,10 @@ WHERE :NEW.FECHA_INICIO BETWEEN vcargos.info_historial_cargos(INDICE2).fecha_ini
 
 select 1
 from dual 
-WHERE TO_DATE('25/01/2012', 'DD/MM/YYYY') OR TO_DATE('25/01/2012', 'DD/MM/YYYY') 
-BETWEEN TO_DATE('15/01/2014', 'DD/MM/YYYY') AND
-                             TO_DATE('15/01/2015', 'DD/MM/YYYY');
+WHERE TO_DATE('25/01/2012', 'DD/MM/YYYY')
+BETWEEN TO_DATE('15/01/2014', 'DD/MM/YYYY') AND TO_DATE('15/01/2015', 'DD/MM/YYYY')
+AND vmandatos.info_contratos_mandatos('0').numcolegiado = '472' 
+and vmandatos.info_contratos_mandatos('0').codcomunidad = 'AAAA1';
 
 vcargos.info_historial_cargos(INDICE2).CODCOMUNIDAD
 
