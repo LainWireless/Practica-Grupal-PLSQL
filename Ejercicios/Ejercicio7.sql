@@ -34,6 +34,24 @@ BEGIN
 END;
 /
 
+--Función para comprobar rangos de fechas
+create or replace FUNCTION comprobar_fecha_mandatos(p_fecha in date,INDICE2 in NUMBER,p_colegiado in VARCHAR2)
+RETURN NUMBER
+IS
+	v_rfecha NUMBER;
+BEGIN
+    select 1 into v_rfecha from dual 
+    WHERE p_fecha BETWEEN vmandatos.info_contratos_mandatos(INDICE2).fecha_inicio AND
+    vmandatos.info_contratos_mandatos(INDICE2).fecha_final AND vmandatos.info_contratos_mandatos(INDICE2).numcolegiado = p_colegiado ;
+	if v_rfecha = 1 THEN
+        RETURN v_rfecha;
+    ELSE
+        v_rfecha := 0;
+        RETURN v_rfecha;
+    END IF;
+END;
+/
+
 --Trigger para controlar los contratos de mandatos
 CREATE OR REPLACE TRIGGER Control_mandatos
 BEFORE INSERT OR UPDATE ON CONTRATOS_DE_MANDATO
@@ -44,7 +62,7 @@ DECLARE
     contador NUMBER:=0;
 BEGIN
     FOR v_cur in vmandatos.info_contratos_mandatos.FIRST.. vmandatos.info_contratos_mandatos.LAST LOOP
-        select comprobar_fecha_mandatos(:NEW.FECHA_INICIO,INDICE2) into v_rfecha from dual;
+        select comprobar_fecha_mandatos(:NEW.FECHA_INICIO,INDICE2,:NEW.NUMCOLEGIADO) into v_rfecha from dual;
         IF v_rfecha = 1 THEN
             contador := contador + 1;
         END IF; 
@@ -53,66 +71,27 @@ BEGIN
 	    END IF;
         INDICE2 := INDICE2 + 1;
     END LOOP;
+    contador := 0;
+    vmandatos.info_contratos_mandatos.DELETE;
 END;
 /
-
---Función para comprobar rangos de fechas
-create or replace FUNCTION comprobar_fecha_mandatos(p_fecha in date,INDICE2 in NUMBER,p_colegiado in VARCHAR2,p_comunidad in VARCHAR2)
-RETURN NUMBER
-IS
-	v_rfecha NUMBER;
-BEGIN
-    select 1 into v_rfecha from dual 
-    WHERE p_fecha BETWEEN vmandatos.info_contratos_mandatos(INDICE2).fecha_inicio AND
-    vmandatos.info_contratos_mandatos(INDICE2).fecha_final AND vmandatos.info_contratos_mandatos(INDICE2).numcolegiado = p_colegiado 
-    and vmandatos.info_contratos_mandatos(INDICE2).codcomunidad = p_comunidad;
-	if v_rfecha = 1 THEN
-        RETURN v_rfecha;
-    ELSE
-        v_rfecha := 0;
-        RETURN v_rfecha;
-    END IF;
-END;
-/
-
-DECLARE
-    v_sfecha NUMBER;
-BEGIN
-    select comprobar_fecha_mandatos(TO_DATE('25/02/2016', 'DD/MM/YYYY'),0,'472','AAAA1') into v_sfecha from dual;
-    dbms_output.put_line(v_sfecha);
-end;
-
-select 1
-from dual 
-WHERE :NEW.FECHA_INICIO BETWEEN vcargos.info_historial_cargos(INDICE2).fecha_inicio AND
-                             vcargos.info_historial_cargos(INDICE2).fecha_final;
-
-
-select 1
-from dual 
-WHERE TO_DATE('25/01/2012', 'DD/MM/YYYY')
-BETWEEN TO_DATE('15/01/2014', 'DD/MM/YYYY') AND TO_DATE('15/01/2015', 'DD/MM/YYYY')
-AND vmandatos.info_contratos_mandatos('0').numcolegiado = '472' 
-and vmandatos.info_contratos_mandatos('0').codcomunidad = 'AAAA1';
-
-vcargos.info_historial_cargos(INDICE2).CODCOMUNIDAD
 
 --Pruebas
 
 INSERT INTO contratos_de_mandato
-VALUES('AA0014','812',TO_DATE('2018/01/19','YYYY/MM/DD'),
+VALUES('AA0015','812',TO_DATE('2018/01/19','YYYY/MM/DD'),
 TO_DATE('2019/01/20','YYYY/MM/DD'),420,'AAAA1');
 
 INSERT INTO contratos_de_mandato
-VALUES('AA0015','812',TO_DATE('2018/01/19','YYYY/MM/DD'),
+VALUES('AA0016','812',TO_DATE('2018/01/19','YYYY/MM/DD'),
 TO_DATE('2019/01/20','YYYY/MM/DD'),420,'AAAA2');
 
 INSERT INTO contratos_de_mandato
-VALUES('AA0016','812',TO_DATE('2018/01/19','YYYY/MM/DD'),
+VALUES('AA0017','812',TO_DATE('2018/01/19','YYYY/MM/DD'),
 TO_DATE('2019/01/20','YYYY/MM/DD'),420,'AAAA3');
 
 INSERT INTO contratos_de_mandato
-VALUES('AA0017','389',TO_DATE('2018/01/19','YYYY/MM/DD'),
+VALUES('AA0018','389',TO_DATE('2018/01/19','YYYY/MM/DD'),
 TO_DATE('2019/01/20','YYYY/MM/DD'),420,'AAAA4');
 
 INSERT INTO contratos_de_mandato
@@ -136,10 +115,6 @@ VALUES('AA0014','472',TO_DATE('2018/01/19','YYYY/MM/DD'),
 TO_DATE('2019/01/20','YYYY/MM/DD'),420,'AAAA5');
 
 delete from CONTRATOS_DE_MANDATO where FECHA_INICIO = TO_DATE('2018/01/19','YYYY/MM/DD');
-delete from CONTRATOS_DE_MANDATO where CODCONTRATO = 'AA0008';
-
-
-select * from CONTRATOS_DE_MANDATO;
 
 drop TRIGGER Control_mandatos;
 
@@ -153,6 +128,9 @@ BEGIN
     END LOOP;
 END;
 
+BEGIN
+    vmandatos.info_contratos_mandatos.DELETE;
+END;
 
 select * from CONTRATOS_DE_MANDATO;
 describe CONTRATOS_DE_MANDATO;
