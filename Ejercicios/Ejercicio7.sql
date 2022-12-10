@@ -44,7 +44,7 @@ DECLARE
     contador NUMBER:=0;
 BEGIN
     FOR v_cur in vmandatos.info_contratos_mandatos.FIRST.. vmandatos.info_contratos_mandatos.LAST LOOP
-        select comprobar_fecha_mandatos(:NEW.FECHA_INICIO,0) into v_rfecha from dual;
+        select comprobar_fecha_mandatos(:NEW.FECHA_INICIO,INDICE2) into v_rfecha from dual;
         IF v_rfecha = 1 THEN
             contador := contador + 1;
         END IF; 
@@ -98,15 +98,42 @@ vcargos.info_historial_cargos(INDICE2).CODCOMUNIDAD
 --Pruebas
 
 INSERT INTO contratos_de_mandato
-VALUES('AA0007','472',TO_DATE('2016/01/15','YYYY/MM/DD'),
-TO_DATE('2017/01/15','YYYY/MM/DD'),420,'AAAA1');
+VALUES('AA0014','812',TO_DATE('2018/01/19','YYYY/MM/DD'),
+TO_DATE('2019/01/20','YYYY/MM/DD'),420,'AAAA1');
 
 INSERT INTO contratos_de_mandato
-VALUES('AA0008','472',TO_DATE('2016/01/15','YYYY/MM/DD'),
-TO_DATE('2017/01/15','YYYY/MM/DD'),420,'AAAA1');
+VALUES('AA0015','812',TO_DATE('2018/01/19','YYYY/MM/DD'),
+TO_DATE('2019/01/20','YYYY/MM/DD'),420,'AAAA2');
 
+INSERT INTO contratos_de_mandato
+VALUES('AA0016','812',TO_DATE('2018/01/19','YYYY/MM/DD'),
+TO_DATE('2019/01/20','YYYY/MM/DD'),420,'AAAA3');
 
-delete from CONTRATOS_DE_MANDATO where CODCONTRATO = 'AA0007';
+INSERT INTO contratos_de_mandato
+VALUES('AA0017','389',TO_DATE('2018/01/19','YYYY/MM/DD'),
+TO_DATE('2019/01/20','YYYY/MM/DD'),420,'AAAA4');
+
+INSERT INTO contratos_de_mandato
+VALUES('AA0010','472',TO_DATE('2018/01/19','YYYY/MM/DD'),
+TO_DATE('2019/01/20','YYYY/MM/DD'),420,'AAAA1');
+
+INSERT INTO contratos_de_mandato
+VALUES('AA0011','472',TO_DATE('2018/01/19','YYYY/MM/DD'),
+TO_DATE('2019/01/20','YYYY/MM/DD'),420,'AAAA2');
+
+INSERT INTO contratos_de_mandato
+VALUES('AA0012','472',TO_DATE('2018/01/19','YYYY/MM/DD'),
+TO_DATE('2019/01/20','YYYY/MM/DD'),420,'AAAA3');
+
+INSERT INTO contratos_de_mandato
+VALUES('AA0013','472',TO_DATE('2018/01/19','YYYY/MM/DD'),
+TO_DATE('2019/01/20','YYYY/MM/DD'),420,'AAAA4');
+
+INSERT INTO contratos_de_mandato
+VALUES('AA0014','472',TO_DATE('2018/01/19','YYYY/MM/DD'),
+TO_DATE('2019/01/20','YYYY/MM/DD'),420,'AAAA5');
+
+delete from CONTRATOS_DE_MANDATO where FECHA_INICIO = TO_DATE('2018/01/19','YYYY/MM/DD');
 delete from CONTRATOS_DE_MANDATO where CODCONTRATO = 'AA0008';
 
 
