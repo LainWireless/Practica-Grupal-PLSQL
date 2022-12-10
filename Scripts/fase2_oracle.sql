@@ -93,7 +93,7 @@ codcomunidad		VARCHAR2(8),
 codpropiedad		VARCHAR2(4),
 dni_propietario		VARCHAR2(9),
 portal				VARCHAR2(3),
-planta				VARCHAR2(4),
+planta				VARCHAR2(7),
 letra				VARCHAR2(1),
 porcentaje_participacion NUMBER(5,2),
 CONSTRAINT pk_propiedad PRIMARY KEY (codcomunidad,codpropiedad),
@@ -189,7 +189,7 @@ INSERT INTO propietarios VALUES('K6022994B','Luisa','Sanchez Sanchez','Calle Cua
 --PROPIEDADES
 INSERT INTO propiedades VALUES('AAAA1','0001','49027387N','13','Bajo','A',7.750);
 INSERT INTO propiedades VALUES('AAAA1','0002','50765614Z','13','Bajo','B',10.50);
-INSERT INTO propiedades VALUES('AAAA1','0003','10880946Z','13','1º','A',25.75);
+INSERT INTO propiedades VALUES('AAAA1','0003','10880946Z','13','1','A',25.75);
 INSERT INTO propiedades VALUES('AAAA1','0004','23293294K','13','1º','B',7.750);
 INSERT INTO propiedades VALUES('AAAA1','0005','79074112J','13','1º','C',7.750);
 INSERT INTO propiedades VALUES('AAAA1','0006','16593504Q','13','1º','D',7.750);
