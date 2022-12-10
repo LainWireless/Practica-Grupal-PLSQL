@@ -41,19 +41,18 @@ FOR EACH ROW
 DECLARE
     INDICE2 NUMBER:=0;
     v_rfecha NUMBER;
+    contador NUMBER:=0;
 BEGIN
     FOR v_cur in vmandatos.info_contratos_mandatos.FIRST.. vmandatos.info_contratos_mandatos.LAST LOOP
         select comprobar_fecha_mandatos(:NEW.FECHA_INICIO,0) into v_rfecha from dual;
-
-        IF :NEW.NUMCOLEGIADO = vcargos.info_historial_cargos(INDICE2).NUMCOLEGIADO AND :NEW.CODCOMUNIDAD = vcargos.info_historial_cargos(INDICE2).CODCOMUNIDAD THEN
-            IF :NEW.FECHA_INICIO >= vcargos.info_historial_cargos(INDICE2).FECHA_FINAL AND :NEW.FECHA_FIN <= vcargos.info_historial_cargos(INDICE2).FECHA_FIN THEN
-                RAISE_APPLICATION_ERROR(-20001, 'Los Administradores solo pueden gestionar un máximo de 4 comunidades simultáneamente');
-            END IF; 
+        IF v_rfecha = 1 THEN
+            contador := contador + 1;
+        END IF; 
+        IF contador = 4 THEN
+            RAISE_APPLICATION_ERROR(-20001, 'Los Administradores solo pueden gestionar un máximo de 4 comunidades simultáneamente');
 	    END IF;
         INDICE2 := INDICE2 + 1;
     END LOOP;
-
-
 END;
 /
 
@@ -75,3 +74,56 @@ BEGIN
 END;
 /
 
+DECLARE
+    v_sfecha NUMBER;
+BEGIN
+    select comprobar_fecha_mandatos(TO_DATE('25/02/2016', 'DD/MM/YYYY'),0) into v_sfecha from dual;
+    dbms_output.put_line(v_sfecha);
+end;
+
+select 1
+from dual 
+WHERE :NEW.FECHA_INICIO BETWEEN vcargos.info_historial_cargos(INDICE2).fecha_inicio AND
+                             vcargos.info_historial_cargos(INDICE2).fecha_final;
+
+
+select 1
+from dual 
+WHERE TO_DATE('25/01/2012', 'DD/MM/YYYY') OR TO_DATE('25/01/2012', 'DD/MM/YYYY') 
+BETWEEN TO_DATE('15/01/2014', 'DD/MM/YYYY') AND
+                             TO_DATE('15/01/2015', 'DD/MM/YYYY');
+
+vcargos.info_historial_cargos(INDICE2).CODCOMUNIDAD
+
+--Pruebas
+
+INSERT INTO contratos_de_mandato
+VALUES('AA0007','472',TO_DATE('2016/01/15','YYYY/MM/DD'),
+TO_DATE('2017/01/15','YYYY/MM/DD'),420,'AAAA1');
+
+INSERT INTO contratos_de_mandato
+VALUES('AA0008','472',TO_DATE('2016/01/15','YYYY/MM/DD'),
+TO_DATE('2017/01/15','YYYY/MM/DD'),420,'AAAA1');
+
+
+delete from CONTRATOS_DE_MANDATO where CODCONTRATO = 'AA0007';
+delete from CONTRATOS_DE_MANDATO where CODCONTRATO = 'AA0008';
+
+
+select * from CONTRATOS_DE_MANDATO;
+
+drop TRIGGER Control_mandatos;
+
+BEGIN
+    FOR v_cur in vmandatos.info_contratos_mandatos.FIRST.. vmandatos.info_contratos_mandatos.LAST LOOP
+        dbms_output.put_line(vmandatos.info_contratos_mandatos(v_cur).NUMCOLEGIADO);
+        dbms_output.put_line(vmandatos.info_contratos_mandatos(v_cur).CODCOMUNIDAD);
+        dbms_output.put_line(vmandatos.info_contratos_mandatos(v_cur).FECHA_INICIO);
+        dbms_output.put_line(vmandatos.info_contratos_mandatos(v_cur).FECHA_FINAL);
+        dbms_output.put_line(' ');
+    END LOOP;
+END;
+
+
+select * from CONTRATOS_DE_MANDATO;
+describe CONTRATOS_DE_MANDATO;
