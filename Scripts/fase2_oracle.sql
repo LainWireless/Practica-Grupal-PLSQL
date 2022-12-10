@@ -58,7 +58,7 @@ localidad			VARCHAR2(35),
 provincia			VARCHAR2(20),
 tlf_contacto		VARCHAR2(9),
 CONSTRAINT pk_propietario PRIMARY KEY (dni),
-CONSTRAINT apellidosok CHECK(apellidos=initcap(apellidos))
+CONSTRAINT apellidosok CHECK(INITCAP(apellidos)=apellidos)
 );
 
 
