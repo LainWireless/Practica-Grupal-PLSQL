@@ -1,1 +1,86 @@
 
+Realiza los módulos de programación necesarios para que cuando se abone un recibo que lleve más de un año 
+impagado se avise por correo electrónico al presidente de la comunidad y al administrador que tiene un contrato de 
+mandato vigente con la comunidad correspondiente. Añade el campo e-mail tanto a la tabla Propietarios como 
+Administradores.
+
+--Añadimos la columna email en la tabla Propietarios.
+
+ALTER TABLE Propietarios 
+ADD email VARCHAR2(255)
+CONSTRAINT check_email_propietarios CHECK (LOWER (email) LIKE '%@%');
+
+
+--Añadimos la columna email en la tabla Administradores.
+
+ALTER TABLE Administradores
+ADD email VARCHAR2(255)
+CONSTRAINT check_email_administradores CHECK (LOWER (email) LIKE '%@%');
+
+
+--Actualización de datos (email) en las tabla Propietarios.
+
+--Primero realizaremos una consulta para mostrar los DNI y Nombre de los Propietarios que sean "Presidente".
+
+SELECT p.DNI, Nombre 
+FROM Propietarios p, historial_cargos h
+WHERE p.DNI=h.DNI and h.nombre_cargo='Presidente';
+
+--Realizamos una serie de actualizaciones en la columna "email" de la tabla "propietarios" sobre los resultados obtenidos en la consulta anterior.v_propietario.dni
+--Como el nombre de cada correo es totalmente distinto, este proceso de asignación se realiza manualmente.
+
+update Propietarios set email='rosa@iesgn.com' where dni='09291497A';
+update Propietarios set email='josemanuel@iesgn.com' where dni='49027387N';
+update Propietarios set email='laura@iesgn.com' where dni='71441529X';
+
+
+--Actualización de datos (email) en las tabla Administradores.
+
+--En este caso aplicamos la actualización a todos los Administradores.
+
+update Administradores set email='adminelisa@iesgn.com' where dni='52801993L';
+update Administradores set email='adminjosemanuel@iesgn.com' where dni='27449907M';
+update Administradores set email='admincarlos@iesgn.com' where dni='23229790C';
+update Administradores set email='admintomas@iesgn.com' where dni='23229791T';
+
+
+--Trigger principal
+
+CREATE OR REPLACE TRIGGER recibo_mas_de_un_año_impagado
+before insert on recibos_cuotas
+for each row
+DECLARE
+BEGIN
+if (Devolver_año_actual - Devolver_ano(:new.fecha)) > 1 then
+
+end if;
+END;
+/
+
+
+--Función que devuelve el año actual
+
+CREATE OR REPLACE FUNCTION Devolver_año_actual
+return number
+IS
+v_añoactual NUMBER;
+BEGIN
+select extract(year from sysdate) into v_añoactual from dual;
+return v_añoactual;
+END;
+/
+
+--Función que devuelve el año de la fecha introducida
+
+CREATE OR REPLACE FUNCTION Devolver_ano (p_fecha recibos_cuotas.fecha%type)
+return number
+IS
+v_año NUMBER;
+BEGIN
+v_año:=TO_NUMBER(TO_CHAR(p_fecha,'YYYY'));
+return v_año;
+END;
+/
+
+--
+
