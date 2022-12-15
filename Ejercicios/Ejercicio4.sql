@@ -46,12 +46,12 @@ update Administradores set email='admintomas@iesgn.com' where dni='23229791T';
 
 --Trigger principal
 
-CREATE OR REPLACE TRIGGER recibo_mas_de_un_año_impagado
+CREATE OR REPLACE TRIGGER recibo_mas_de_un_ano_impagado
 before insert on recibos_cuotas
 for each row
 DECLARE
 BEGIN
-if (Devolver_año_actual - Devolver_ano(:new.fecha)) > 1 then
+if (Devolver_ano_actual - Devolver_ano(:new.fecha)) > 1 then
 
 end if;
 END;
@@ -60,13 +60,13 @@ END;
 
 --Función que devuelve el año actual
 
-CREATE OR REPLACE FUNCTION Devolver_año_actual
+CREATE OR REPLACE FUNCTION Devolver_ano_actual
 return number
 IS
-v_añoactual NUMBER;
+v_anoactual NUMBER;
 BEGIN
-select extract(year from sysdate) into v_añoactual from dual;
-return v_añoactual;
+select extract(year from sysdate) into v_anoactual from dual;
+return v_anoactual;
 END;
 /
 
@@ -75,10 +75,10 @@ END;
 CREATE OR REPLACE FUNCTION Devolver_ano (p_fecha recibos_cuotas.fecha%type)
 return number
 IS
-v_año NUMBER;
+v_ano NUMBER;
 BEGIN
-v_año:=TO_NUMBER(TO_CHAR(p_fecha,'YYYY'));
-return v_año;
+v_ano:=TO_NUMBER(TO_CHAR(p_fecha,'YYYY'));
+return v_ano;
 END;
 /
 
