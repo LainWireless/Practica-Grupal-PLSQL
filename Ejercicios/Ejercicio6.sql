@@ -168,3 +168,13 @@ elsif (select COUNT(NOMBRE_CARGO) from VCARGOS.info_historial_cargos) > 0 THEN
     dbms_output.put_line('Fallo');
 end if;
 END;
+
+DECLARE
+    cursor info_cargos IS select CODCOMUNIDAD,DNI,FECHA_INICIO,FECHA_FIN from HISTORIAL_CARGOS;
+BEGIN
+    IF info_cargos%found THEN
+        dbms_output.put_line('1');
+    elsif info_cargos%notfound THEN
+        dbms_output.put_line('1');
+    end if;
+END;
