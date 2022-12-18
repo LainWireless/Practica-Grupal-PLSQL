@@ -7,16 +7,17 @@ Administradores.
 --CONFIGURACIÓN PREVIA----------------------------------------------------------------------------------------------------------------------------------------------
 
 --Para enviar correos electrónicos mediante procedimientos PL/SQL usaremos UTL_MAIL.
+--En este ejercicio, realizaré una prueba de envío y recepción de correo electrónico local (Entre usuarios de iesgn.com).
 --Antes de crear los procedimientos previos al envío de correo electrónico, debemos de realizar una configuración previa:
 
 --1. Accedemos con el usuario sys
 
-CONN sys/contraseña AS SYSDBA
-
+sqlplus / as sysdba
 
 --2. Ejecutamos los siguiente scripts
 
 @$ORACLE_HOME/rdbms/admin/utlmail.sql
+@$ORACLE_HOME/rdbms/admin/utlsmtp.sql
 @$ORACLE_HOME/rdbms/admin/prvtmail.plb
 
 
@@ -30,11 +31,63 @@ ALTER SYSTEM SET smtp_out_server='localhost' SCOPE=SPFILE;
 show parameter smtp
 
 
---4. Concedemos permisos para ejecutar el procedimiento
+--4. Concedemos permisos para ejecutar el procedimiento mediante un nuevo rol ACL_ADMIN
 
-grant execute on UTL_MAIL to public;
+alter session set "_ORACLE_SCRIPT"=TRUE;
 
---En este caso concederé permiso general, de lo contrario debemos de crear un ROL, darle los permisos necesarios y concederle el rol al usuario que vayamos a utilizar.
+
+--Configuramos el rol concediendo los permisos de ejecución sobre (utl_mail y utl_smtp)
+
+create role ACL_ADMIN;
+grant create session to ACL_ADMIN;
+grant execute on utl_mail to ACL_ADMIN;
+grant execute on utl_smtp to ACL_ADMIN;
+
+
+--Creamos la ACL, dándole privilegios al ROL que hemos creado. 
+
+BEGIN
+DBMS_NETWORK_acl_ADMIN.CREATE_ACL (
+acl => 'acl_admin.xml',
+description => 'Permissions to access mail',
+principal => 'ACL_ADMIN',
+is_grant => TRUE,
+privilege => 'connect',
+start_date => SYSTIMESTAMP,
+end_date => NULL);
+COMMIT;
+END;
+/
+
+BEGIN
+DBMS_NETWORK_acl_ADMIN.ADD_PRIVILEGE(
+acl => 'acl_admin.xml',
+principal => 'ACL_ADMIN',
+is_grant => true,
+privilege => 'resolve'
+);
+COMMIT;
+END;
+/
+
+BEGIN
+DBMS_NETWORK_acl_ADMIN.ASSIGN_ACL (
+acl => 'acl_admin.xml',
+host => '*');
+COMMIT;
+END;
+/
+
+--Para comprobar los permisos que tenemos y las listas creads en nuestra base de datos usamos las siguiente consultas:
+
+select acl , host , lower_port , upper_port from DBA_NETWORK_ACLS;
+select acl , principal , privilege , is_grant from DBA_NETWORK_ACL_PRIVILEGES;
+
+--Otorgamos el rol, al usuario que vamos a usar para enviar el correo, en este caso el usuario donde se disparará el trigger.
+
+grant ACL_ADMIN to alfonso;
+
+--Una vez realizada la configuración anterior, ya podemos volver a nuestro usuario y compilar el código mostrado a continuación.
 
 --NUEVAS COLUMNAS Y ACTUALIZACIÓN DE DATOS--------------------------------------------------------------------------------------------------------------------------
 
@@ -149,10 +202,10 @@ END;
 
 --Procedimiento que introduciendo un código de comunidad envía un correo al presidente de la comunidad.
 
-CREATE OR REPLACE PROCEDURE correo_presidente_comunidad (p_codcomunidad recibos_cuotas.codcomunidad%type)
+CREATE OR REPLACE PROCEDURE correo_presidente_comunidad(p_codcomunidad recibos_cuotas.codcomunidad%type)
 IS
 BEGIN
-  UTL_MAIL.send(sender     => 'administrador@local.com',
+  UTL_MAIL.send(sender     => 'administrador@iesgn.com',
                 recipients => Devolver_email_presidente_comunidad(p_codcomunidad),
                 subject    => 'Recibo (+1 año impagado)',
                 message    => 'Se ha abonado un recibo que lleva más de un año impagado');
@@ -162,12 +215,23 @@ END;
 
 --Procedimiento que introduciendo un codigo de comunidad envía un correo al administrador que tiene un contrato de mandato.
 
-CREATE OR REPLACE PROCEDURE correo_administrador_comunidad (p_codcomunidad recibos_cuotas.codcomunidad%type)
+CREATE OR REPLACE PROCEDURE correo_administrador_comunidad(p_codcomunidad recibos_cuotas.codcomunidad%type)
 IS
 BEGIN
-  UTL_MAIL.send(sender     => 'administrador@local.com',
+  UTL_MAIL.send(sender     => 'administrador@iesgn.com',
                 recipients => Devolver_email_administrador_comunidad(p_codcomunidad),
                 subject    => 'Recibo (+1 año impagado)',
                 message    => 'Se ha abonado un recibo que lleva más de un año impagado');
 END;
 /
+
+
+
+--PRUEBA DE FUNCIONAMIENTO------------------------------------------------------------------------------------------------------------------------------------------
+
+--Probaremos a insertar un registro en Recibos_cuotas donde la fecha tenga más de un año de antiguedad y el valor "Pagado" sea "No".
+
+INSERT INTO recibos_cuotas VALUES('0007','AAAA2','09291497A',TO_DATE('2013/11/11','YYYY/MM/DD'),35,'No');
+
+
+
