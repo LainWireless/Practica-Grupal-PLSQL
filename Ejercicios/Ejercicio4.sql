@@ -21,7 +21,7 @@ sqlplus / as sysdba
 @$ORACLE_HOME/rdbms/admin/prvtmail.plb
 
 
---3. Establecemos el serviodr SMPT de salida
+--3. Establecemos el servidor SMTP de salida
 --En este caso la configuración de retransmisión de correo será simple, con una referencia a "localhost" en el parámetro SMTP_OUT_SERVER.
 
 ALTER SYSTEM SET smtp_out_server='localhost' SCOPE=SPFILE;
