@@ -85,28 +85,28 @@ END;
 /
 
 
---Función que introduciendo el código de la comunidad nos devuelve el dni del presidente de dicha comunidad.
+--Función que introduciendo el código de la comunidad nos devuelve el correo del presidente de dicha comunidad.
 
-CREATE OR REPLACE FUNCTION Devolver_dni_presidente_comunidad(p_codcomunidad comunidades.codcomunidad%type)
-return propietarios.dni%type
+CREATE OR REPLACE FUNCTION Devolver_email_presidente_comunidad(p_codcomunidad comunidades.codcomunidad%type)
+return propietarios.email%type
 IS
-v_dni propietarios.dni%type;
+v_email propietarios.email%type;
 BEGIN
-select dni into v_dni from propietarios where dni=(select dni from historial_cargos where nombre_cargo='Presidente' and codcomunidad=p_codcomunidad);
-return v_dni;
+select email into v_email from propietarios where dni=(select dni from historial_cargos where nombre_cargo='Presidente' and codcomunidad=p_codcomunidad);
+return v_email;
 END;
 /
 
 
---Función que introduciendo el código de la comunidad nos devuelve el dni del administrador que tiene un contrato de mandato vigente con dicha comunidad.
+--Función que introduciendo el código de la comunidad nos devuelve el correo del administrador que tiene un contrato de mandato vigente con dicha comunidad.
 
-CREATE OR REPLACE FUNCTION Devolver_dni_administrador_comunidad(p_codcomunidad comunidades.codcomunidad%type)
-return administradores.dni%type
+CREATE OR REPLACE FUNCTION Devolver_email_administrador_comunidad(p_codcomunidad comunidades.codcomunidad%type)
+return administradores.email%type
 IS
-v_dni administradores.dni%type;
+v_email administradores.email%type;
 BEGIN
-select dni into v_dni from administradores where numcolegiado=(select numcolegiado from contratos_de_mandato where codcomunidad=p_codcomunidad);
-return v_dni;
+select email into v_email from administradores where numcolegiado=(select numcolegiado from contratos_de_mandato where codcomunidad=p_codcomunidad);
+return v_email;
 END;
 /
 
@@ -116,6 +116,10 @@ END;
 CREATE OR REPLACE PROCEDURE correo_presidente_comunidad (p_comunidad recibos_cuotas.codcomunidad%type)
 IS
 BEGIN
+  UTL_MAIL.send(sender     => 'alfonso@localhost',
+                recipients => 'megaalfonso84@gmail.com',
+                subject    => 'Asunto del correo',
+                message    => 'Cuerpo de texto de prueba');
 END;
 /
 
