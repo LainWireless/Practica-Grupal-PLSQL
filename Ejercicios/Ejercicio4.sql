@@ -4,6 +4,40 @@ impagado se avise por correo electrónico al presidente de la comunidad y al adm
 mandato vigente con la comunidad correspondiente. Añade el campo e-mail tanto a la tabla Propietarios como 
 Administradores.
 
+--CONFIGURACIÓN PREVIA----------------------------------------------------------------------------------------------------------------------------------------------
+
+--Para enviar correos electrónicos mediante procedimientos PL/SQL usaremos UTL_MAIL.
+--Antes de crear los procedimientos previos al envío de correo electrónico, debemos de realizar una configuración previa:
+
+--1. Accedemos con el usuario sys
+
+CONN sys/contraseña AS SYSDBA
+
+
+--2. Ejecutamos los siguiente scripts
+
+@$ORACLE_HOME/rdbms/admin/utlmail.sql
+@$ORACLE_HOME/rdbms/admin/prvtmail.plb
+
+
+--3. Establecemos el serviodr SMPT de salida
+--En este caso la configuración de retransmisión de correo será simple, con una referencia a "localhost" en el parámetro SMTP_OUT_SERVER.
+
+ALTER SYSTEM SET smtp_out_server='localhost' SCOPE=SPFILE;
+
+--*Nota: Podemos comprobar el valor de este parámetro con el siguiente comando:
+
+show parameter smtp
+
+
+--4. Concedemos permisos para ejecutar el procedimiento
+
+grant execute on UTL_MAIL to public;
+
+--En este caso concederé permiso general, de lo contrario debemos de crear un ROL, darle los permisos necesarios y concederle el rol al usuario que vayamos a utilizar.
+
+--NUEVAS COLUMNAS Y ACTUALIZACIÓN DE DATOS--------------------------------------------------------------------------------------------------------------------------
+
 --Añadimos la columna email en la tabla Propietarios.
 
 ALTER TABLE Propietarios 
@@ -44,16 +78,18 @@ update Administradores set email='admincarlos@iesgn.com' where dni='23229790C';
 update Administradores set email='admintomas@iesgn.com' where dni='23229791T';
 
 
+--CREACIÓN DE TRIGGER PRINCIPAL Y PROCEDIMIENTOS/FUNCIONES DEPENDIENTES---------------------------------------------------------------------------------------------
+
 --Trigger principal
 
 CREATE OR REPLACE TRIGGER recibo_mas_de_un_ano_impagado
-before insert on recibos_cuotas
+after insert or update on recibos_cuotas
 for each row
 DECLARE
 BEGIN
 if (Devolver_ano_actual - Devolver_ano(:new.fecha)) > 1 then
-    :new.comunidad
-
+    correo_presidente_comunidad(:new.codcomunidad);
+    correo_administrador_comunidad(:new.codcomunidad);
 end if;
 END;
 /
@@ -113,15 +149,25 @@ END;
 
 --Procedimiento que introduciendo un código de comunidad envía un correo al presidente de la comunidad.
 
-CREATE OR REPLACE PROCEDURE correo_presidente_comunidad (p_comunidad recibos_cuotas.codcomunidad%type)
+CREATE OR REPLACE PROCEDURE correo_presidente_comunidad (p_codcomunidad recibos_cuotas.codcomunidad%type)
 IS
 BEGIN
-  UTL_MAIL.send(sender     => 'alfonso@localhost',
-                recipients => 'megaalfonso84@gmail.com',
-                subject    => 'Asunto del correo',
-                message    => 'Cuerpo de texto de prueba');
+  UTL_MAIL.send(sender     => 'administrador@local.com',
+                recipients => Devolver_email_presidente_comunidad(p_codcomunidad),
+                subject    => 'Recibo (+1 año impagado)',
+                message    => 'Se ha abonado un recibo que lleva más de un año impagado');
 END;
 /
 
 
 --Procedimiento que introduciendo un codigo de comunidad envía un correo al administrador que tiene un contrato de mandato.
+
+CREATE OR REPLACE PROCEDURE correo_administrador_comunidad (p_codcomunidad recibos_cuotas.codcomunidad%type)
+IS
+BEGIN
+  UTL_MAIL.send(sender     => 'administrador@local.com',
+                recipients => Devolver_email_administrador_comunidad(p_codcomunidad),
+                subject    => 'Recibo (+1 año impagado)',
+                message    => 'Se ha abonado un recibo que lleva más de un año impagado');
+END;
+/
