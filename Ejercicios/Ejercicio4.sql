@@ -52,6 +52,7 @@ for each row
 DECLARE
 BEGIN
 if (Devolver_ano_actual - Devolver_ano(:new.fecha)) > 1 then
+    :new.comunidad
 
 end if;
 END;
@@ -70,6 +71,7 @@ return v_anoactual;
 END;
 /
 
+
 --Función que devuelve el año de la fecha introducida
 
 CREATE OR REPLACE FUNCTION Devolver_ano (p_fecha recibos_cuotas.fecha%type)
@@ -82,5 +84,40 @@ return v_ano;
 END;
 /
 
---
 
+--Función que introduciendo el código de la comunidad nos devuelve el dni del presidente de dicha comunidad.
+
+CREATE OR REPLACE FUNCTION Devolver_dni_presidente_comunidad(p_codcomunidad comunidades.codcomunidad%type)
+return propietarios.dni%type
+IS
+v_dni propietarios.dni%type;
+BEGIN
+select dni into v_dni from propietarios where dni=(select dni from historial_cargos where nombre_cargo='Presidente' and codcomunidad=p_codcomunidad);
+return v_dni;
+END;
+/
+
+
+--Función que introduciendo el código de la comunidad nos devuelve el dni del administrador que tiene un contrato de mandato vigente con dicha comunidad.
+
+CREATE OR REPLACE FUNCTION Devolver_dni_administrador_comunidad(p_codcomunidad comunidades.codcomunidad%type)
+return administradores.dni%type
+IS
+v_dni administradores.dni%type;
+BEGIN
+select dni into v_dni from administradores where numcolegiado=(select numcolegiado from contratos_de_mandato where codcomunidad=p_codcomunidad);
+return v_dni;
+END;
+/
+
+
+--Procedimiento que introduciendo un código de comunidad envía un correo al presidente de la comunidad.
+
+CREATE OR REPLACE PROCEDURE correo_presidente_comunidad (p_comunidad recibos_cuotas.codcomunidad%type)
+IS
+BEGIN
+END;
+/
+
+
+--Procedimiento que introduciendo un codigo de comunidad envía un correo al administrador que tiene un contrato de mandato.
