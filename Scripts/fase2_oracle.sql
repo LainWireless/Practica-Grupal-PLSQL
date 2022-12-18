@@ -29,7 +29,7 @@ codcontrato			VARCHAR2(6),
 numcolegiado		VARCHAR2(5),
 fecha_inicio		DATE,
 fecha_final			DATE,
-honorarios_anuales	NUMERIC,
+honorarios_anuales	NUMBER,
 codcomunidad		VARCHAR2(8),
 CONSTRAINT pk_codcontrato PRIMARY KEY (codcontrato),
 CONSTRAINT fk_numcolegiado FOREIGN KEY (numcolegiado) REFERENCES administradores (numcolegiado),
@@ -242,7 +242,7 @@ INSERT INTO recibos_cuotas VALUES('0006','AAAA2','09291497A',TO_DATE('2016/04/05
 
 INSERT INTO propiedades VALUES('AAAA1','0001','49027387N','13','Bajo','A',7.750);
 INSERT INTO propiedades VALUES('AAAA1','0002','50765614Z','13','Bajo','B',10.50);
-INSERT INTO propiedades VALUES('AAAA1','0003','10880946Z','13','1','A',25.75);
+INSERT INTO propiedades VALUES('AAAA1','0003','10880946Z','13','1º','A',25.75);
 INSERT INTO propiedades VALUES('AAAA1','0004','23293294K','13','1º','B',7.750);
 INSERT INTO propiedades VALUES('AAAA1','0005','79074112J','13','1º','C',7.750);
 INSERT INTO propiedades VALUES('AAAA1','0006','16593504Q','13','1º','D',7.750);
