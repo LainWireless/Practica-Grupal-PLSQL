@@ -1,6 +1,6 @@
 -- Felipe ha ayudado en su realización proporcionando supervisión y dando consejos.
 -- También se ha prestado a explicarme detalladamente como funcionan los ejercicios de 
--- tablas mutantes que él ya ha realizado gracias a lo cual yo he podido realizar este 
+-- tablas mutantes que él ya ha realizado. Gracias a esto, yo he podido realizar este 
 -- ejercicio con mucha más facilidad.
 
 -- Paquete para guardar las variables de la tabla recibos_cuotas:
