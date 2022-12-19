@@ -1,7 +1,8 @@
 
--- Función que dependiendo del número de propiedades
+-- Procedimiento que dependiendo del número de propiedades
 -- que tenga la comunidad, le asigna unos honorarios anuales u otros.
-CREATE OR REPLACE FUNCTION asignar_honorarios() RETURNS VOID
+
+CREATE OR REPLACE PROCEDURE p_asignar_honorarios()
 AS $$
 DECLARE
   c_propiedades CURSOR FOR
@@ -23,10 +24,10 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-
--- Función que dependiendo del número de locales
+-- Procedimiento que dependiendo del número de locales
 -- que tenga la comunidad, le asigna un 20% más de honorarios anuales.
-CREATE OR REPLACE FUNCTION asignar_honorarios_locales() RETURNS VOID
+
+CREATE OR REPLACE PROCEDURE p_asignar_honorarios_locales()
 AS $$
 DECLARE
   c_locales CURSOR FOR
@@ -43,10 +44,10 @@ END;
 $$ LANGUAGE plpgsql;
 
 
-
--- Función que dependiendo del número de oficinas
+-- Procedimiento que dependiendo del número de oficinas
 -- que tenga la comunidad, le asigna un 10% más de honorarios anuales.
-CREATE OR REPLACE FUNCTION asignar_honorarios_oficinas() RETURNS VOID
+
+CREATE OR REPLACE PROCEDURE p_asignar_honorarios_oficinas()
 AS $$
 DECLARE
   c_oficinas CURSOR FOR
@@ -64,13 +65,15 @@ $$ LANGUAGE plpgsql;
 
 
 
--- Función que actualiza el valor de honorarios anuales.
--- Utiliza las funciones asignar_honorarios, asignar_honorarios_locales y asignar_honorarios_oficinas.
-CREATE OR REPLACE FUNCTION actualizar_honorarios() RETURNS VOID
+-- Procedimiento que actualiza el valor de honorarios anuales.
+-- Utiliza los procedimientos asignar_honorarios, asignar_honorarios_locales y asignar_honorarios_oficinas.
+
+CREATE OR REPLACE PROCEDURE p_actualizar_honorarios()
 AS $$
 BEGIN
-  PERFORM asignar_honorarios();
-  PERFORM asignar_honorarios_locales();
-  PERFORM asignar_honorarios_oficinas();
+  call p_asignar_honorarios();
+  call p_asignar_honorarios_locales();
+  call p_asignar_honorarios_oficinas();
 END;
 $$ LANGUAGE plpgsql;
+
