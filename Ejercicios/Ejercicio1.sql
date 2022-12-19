@@ -1,4 +1,4 @@
-CREATE OR REPLACE PROCEDURE ejercicio1 (p_codcomunidad IN comunidades.codcomunidad%type, p_codpropiedad IN propiedades.codpropiedad%type)
+CREATE OR REPLACE function ejercicio1 (p_codcomunidad IN comunidades.codcomunidad%type, p_codpropiedad IN propiedades.codpropiedad%type)
 RETURN NUMBER
 IS
   p_resultado NUMBER;
