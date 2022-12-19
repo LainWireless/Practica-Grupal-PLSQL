@@ -1,3 +1,4 @@
+-- Felipe ha ayudado en su realización proporcionando supervisión y dando consejos.
 
 -- Procedimiento que dependiendo del número de propiedades
 -- que tenga la comunidad, le asigna unos honorarios anuales u otros.
