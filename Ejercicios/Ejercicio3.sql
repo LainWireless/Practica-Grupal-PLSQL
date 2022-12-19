@@ -56,18 +56,13 @@ BEGIN
 END;
 /
 
--- Trigger que actualiza el valor de honorarios anuales 
--- cuando se inserta o actualiza un registro en la tabla contratos_de_mandato.
+-- Procedimiento que actualiza el valor de honorarios anuales.
 -- Utiliza los procedimientos asignar_honorarios, asignar_honorarios_locales y asignar_honorarios_oficinas.
-CREATE OR REPLACE TRIGGER actualizar_honorarios
-AFTER INSERT OR UPDATE ON contratos_de_mandato
-FOR EACH ROW
+CREATE OR REPLACE PROCEDURE actualizar_honorarios
+IS
 BEGIN
   asignar_honorarios;
   asignar_honorarios_locales;
   asignar_honorarios_oficinas;
 END;
 /
-
--- Insertamos un registro en la tabla contratos_de_mandato.
-INSERT INTO contratos_de_mandato VALUES('AA0009','472',TO_DATE('2016/01/15','YYYY/MM/DD'),TO_DATE('2017/01/15','YYYY/MM/DD'),420,'AAAA1');
