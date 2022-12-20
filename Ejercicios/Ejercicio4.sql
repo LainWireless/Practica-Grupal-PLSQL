@@ -1,8 +1,8 @@
 
-Realiza los módulos de programación necesarios para que cuando se abone un recibo que lleve más de un año 
-impagado se avise por correo electrónico al presidente de la comunidad y al administrador que tiene un contrato de 
-mandato vigente con la comunidad correspondiente. Añade el campo e-mail tanto a la tabla Propietarios como 
-Administradores.
+--Realiza los módulos de programación necesarios para que cuando se abone un recibo que lleve más de un año 
+--impagado se avise por correo electrónico al presidente de la comunidad y al administrador que tiene un contrato de 
+--mandato vigente con la comunidad correspondiente. Añade el campo e-mail tanto a la tabla Propietarios como 
+--Administradores.
 
 --CONFIGURACIÓN PREVIA----------------------------------------------------------------------------------------------------------------------------------------------
 
