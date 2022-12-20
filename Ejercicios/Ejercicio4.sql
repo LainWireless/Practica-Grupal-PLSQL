@@ -4,7 +4,7 @@ impagado se avise por correo electrónico al presidente de la comunidad y al adm
 mandato vigente con la comunidad correspondiente. Añade el campo e-mail tanto a la tabla Propietarios como 
 Administradores.
 
--- CONFIGURACIÓN PREVIA----------------------------------------------------------------------------------------------------------------------------------------------
+-- CONFIGURACIÓN PREVIA--------------------------------------------------------------------------------------------------------------------
 
 --En este ejercicio, realizaré una prueba de envío y recepción de correo electrónico local (Entre usuarios de iesgn.com).
 --Debemos de instalar en el sistema los paquetes postfix (Servidor de correo, configurándolo con el nombre del sistema de correo "iesgn.com") y bsd-mailx (Herramienta para envío/recepción de correo).
@@ -86,7 +86,7 @@ grant execute on utl_mail to alfonso;
 disconnect
 connect alfonso
 
---NUEVAS COLUMNAS Y ACTUALIZACIÓN DE DATOS--------------------------------------------------------------------------------------------------------------------------
+--NUEVAS COLUMNAS Y ACTUALIZACIÓN DE DATOS-------------------------------------------------------------------------------------------------
 
 --Añadimos la columna email en la tabla Propietarios.
 
@@ -128,7 +128,7 @@ update Administradores set email='admincarlos@iesgn.com' where dni='23229790C';
 update Administradores set email='admintomas@iesgn.com' where dni='23229791T';
 
 
---CREACIÓN DE TRIGGER PRINCIPAL Y PROCEDIMIENTOS/FUNCIONES DEPENDIENTES---------------------------------------------------------------------------------------------
+--CREACIÓN DE TRIGGER PRINCIPAL Y PROCEDIMIENTOS/FUNCIONES DEPENDIENTES--------------------------------------------------------------------
 
 --Trigger principal
 
@@ -234,7 +234,7 @@ END;
 /
 
 
---PRUEBA DE FUNCIONAMIENTO------------------------------------------------------------------------------------------------------------------------------------------
+--PRUEBA DE FUNCIONAMIENTO-----------------------------------------------------------------------------------------------------------------
 
 --Probaremos a insertar un registro en Recibos_cuotas donde la fecha tenga más de un año de antiguedad y el valor "Pagado" sea "No".
 
