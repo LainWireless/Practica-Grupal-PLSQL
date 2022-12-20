@@ -55,6 +55,21 @@ BEGIN
 END;
 /
 
+--Procedimiento validación cargos
+
+create or replace procedure validacion_cargos(p_indice2 in out NUMBER, p_rfecha in out NUMBER, p_contador in out NUMBER)
+IS
+BEGIN
+    IF p_rfecha = 1 THEN
+        p_contador := p_contador + 1;
+    END IF; 
+    IF p_contador = 1 THEN
+        RAISE_APPLICATION_ERROR(-20002, 'Los propietarios solo pueden ocupar un cargo en la misma comunidad');
+	END IF;
+    p_indice2 := p_indice2 + 1;
+END;
+/
+
 --Trigger para controlar los cargos
 CREATE OR REPLACE TRIGGER Control_cargos
 BEFORE INSERT OR UPDATE ON HISTORIAL_CARGOS
@@ -75,20 +90,7 @@ BEGIN
 END;
 /
 
---Procedimiento validación cargos
 
-create or replace procedure validacion_cargos(p_indice2 in out NUMBER, p_rfecha in out NUMBER, p_contador in out NUMBER)
-IS
-BEGIN
-    IF p_rfecha = 1 THEN
-        p_contador := p_contador + 1;
-    END IF; 
-    IF p_contador = 1 THEN
-        RAISE_APPLICATION_ERROR(-20002, 'Los propietarios solo pueden ocupar un cargo en la misma comunidad');
-	END IF;
-    p_indice2 := p_indice2 + 1;
-END;
-/
 
 --Pruebas
 
