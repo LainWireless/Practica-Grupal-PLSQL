@@ -152,10 +152,10 @@ END;
 CREATE OR REPLACE FUNCTION Devolver_ano_actual
 return number
 IS
-v_anoactual NUMBER;
+  v_anoactual NUMBER;
 BEGIN
-select extract(year from sysdate) into v_anoactual from dual;
-return v_anoactual;
+  select extract(year from sysdate) into v_anoactual from dual;
+  return v_anoactual;
 END;
 /
 
@@ -165,10 +165,13 @@ END;
 CREATE OR REPLACE FUNCTION Devolver_ano (p_fecha recibos_cuotas.fecha%type)
 return number
 IS
-v_ano NUMBER;
+  v_ano NUMBER;
 BEGIN
-v_ano:=TO_NUMBER(TO_CHAR(p_fecha,'YYYY'));
-return v_ano;
+  v_ano:=TO_NUMBER(TO_CHAR(p_fecha,'YYYY'));
+  return v_ano;
+exception
+  when NO_DATA_FOUND then
+    return '-1';
 END;
 /
 
@@ -178,10 +181,13 @@ END;
 CREATE OR REPLACE FUNCTION Devolver_email_presidente_comunidad(p_codcomunidad comunidades.codcomunidad%type)
 return propietarios.email%type
 IS
-v_email propietarios.email%type;
+  v_email propietarios.email%type;
 BEGIN
-select email into v_email from propietarios where dni=(select dni from historial_cargos where nombre_cargo='Presidente' and codcomunidad=p_codcomunidad);
-return v_email;
+  select email into v_email from propietarios where dni=(select dni from historial_cargos where nombre_cargo='Presidente' and codcomunidad=p_codcomunidad);
+  return v_email;
+exception
+  when NO_DATA_FOUND then
+    return '-1';
 END;
 /
 
@@ -191,10 +197,13 @@ END;
 CREATE OR REPLACE FUNCTION Devolver_email_administrador_comunidad(p_codcomunidad comunidades.codcomunidad%type)
 return administradores.email%type
 IS
-v_email administradores.email%type;
+  v_email administradores.email%type;
 BEGIN
-select email into v_email from administradores where numcolegiado=(select numcolegiado from contratos_de_mandato where codcomunidad=p_codcomunidad);
-return v_email;
+  select email into v_email from administradores where numcolegiado=(select numcolegiado from contratos_de_mandato where codcomunidad=p_codcomunidad);
+  return v_email;
+exception
+  when NO_DATA_FOUND then
+    return '-1';
 END;
 /
 
@@ -230,5 +239,6 @@ END;
 --Probaremos a insertar un registro en Recibos_cuotas donde la fecha tenga más de un año de antiguedad y el valor "Pagado" sea "No".
 
 INSERT INTO recibos_cuotas VALUES('0022','AAAA2','09291497A',TO_DATE('2013/11/11','YYYY/MM/DD'),35,'No');
+
 
 --Una vez insertado, comprobaremos la bandeja de entrada, en este caso, de los usuarios "Rosa" (Presidenta) y "adminjosemanuel" (Administrador) de la comunidad.  
