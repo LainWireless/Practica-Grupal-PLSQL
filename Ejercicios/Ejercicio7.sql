@@ -32,8 +32,8 @@ BEGIN
         vmandatos.info_contratos_mandatos(INDICE).FECHA_INICIO := v_cur.FECHA_INICIO;
         vmandatos.info_contratos_mandatos(INDICE).FECHA_FINAL := v_cur.FECHA_FINAL;
         INDICE := INDICE + 1;
-        select count(CODCONTRATO) into vmandatos.v_status_table from CONTRATOS_DE_MANDATO;
     END LOOP;
+    select count(CODCONTRATO) into vmandatos.v_status_table from CONTRATOS_DE_MANDATO;
 END;
 /
 
@@ -129,6 +129,9 @@ VALUES('AA0014','472',TO_DATE('2018/01/19','YYYY/MM/DD'),
 TO_DATE('2019/01/20','YYYY/MM/DD'),420,'AAAA5');
 
 delete from CONTRATOS_DE_MANDATO where FECHA_INICIO = TO_DATE('2018/01/19','YYYY/MM/DD');
+
+update CONTRATOS_DE_MANDATO set NUMCOLEGIADO = '472' 
+where CODCONTRATO='AA0018' and NUMCOLEGIADO='389';
 
 update CONTRATOS_DE_MANDATO set NUMCOLEGIADO = '812' 
 where CODCONTRATO='AA0018' and NUMCOLEGIADO='389';
