@@ -14,6 +14,8 @@ TYPE tablamandatos IS TABLE OF columnasmandatos INDEX BY BINARY_INTEGER;
 
 info_contratos_mandatos tablamandatos;
 
+v_status_table NUMBER;
+
 END;
 /
 
@@ -30,6 +32,7 @@ BEGIN
         vmandatos.info_contratos_mandatos(INDICE).FECHA_INICIO := v_cur.FECHA_INICIO;
         vmandatos.info_contratos_mandatos(INDICE).FECHA_FINAL := v_cur.FECHA_FINAL;
         INDICE := INDICE + 1;
+        select count(CODCONTRATO) into vmandatos.v_status_table from CONTRATOS_DE_MANDATO;
     END LOOP;
 END;
 /
@@ -52,6 +55,21 @@ BEGIN
 END;
 /
 
+--Procedimiento validación mandatos
+
+create or replace procedure validacion_mandatos(p_indice2 in out NUMBER, p_rfecha in out NUMBER, p_contador in out NUMBER)
+IS
+BEGIN
+    IF p_rfecha = 1 THEN
+        p_contador := p_contador + 1;
+        END IF; 
+    IF p_contador = 4 THEN
+        RAISE_APPLICATION_ERROR(-20001, 'Los Administradores solo pueden gestionar un máximo de 4 comunidades simultáneamente');
+	END IF;
+    p_indice2 := p_indice2 + 1;
+END;
+/
+
 --Trigger para controlar los contratos de mandatos
 CREATE OR REPLACE TRIGGER Control_mandatos
 BEFORE INSERT OR UPDATE ON CONTRATOS_DE_MANDATO
@@ -61,18 +79,14 @@ DECLARE
     v_rfecha NUMBER;
     contador NUMBER:=0;
 BEGIN
-    FOR v_cur in vmandatos.info_contratos_mandatos.FIRST.. vmandatos.info_contratos_mandatos.LAST LOOP
-        select comprobar_fecha_mandatos(:NEW.FECHA_INICIO,INDICE2,:NEW.NUMCOLEGIADO) into v_rfecha from dual;
-        IF v_rfecha = 1 THEN
-            contador := contador + 1;
-        END IF; 
-        IF contador = 4 THEN
-            RAISE_APPLICATION_ERROR(-20001, 'Los Administradores solo pueden gestionar un máximo de 4 comunidades simultáneamente');
-	    END IF;
-        INDICE2 := INDICE2 + 1;
-    END LOOP;
-    contador := 0;
-    vmandatos.info_contratos_mandatos.DELETE;
+    IF vmandatos.v_status_table > 0 THEN
+        FOR v_cur in vmandatos.info_contratos_mandatos.FIRST.. vmandatos.info_contratos_mandatos.LAST LOOP
+            select comprobar_fecha_mandatos(:NEW.FECHA_INICIO,INDICE2,:NEW.NUMCOLEGIADO) into v_rfecha from dual;
+            validacion_mandatos(INDICE2,v_rfecha,contador);
+        END LOOP;
+        contador := 0;
+        vmandatos.info_contratos_mandatos.DELETE;
+    end if;
 END;
 /
 
@@ -139,3 +153,10 @@ select * from CONTRATOS_DE_MANDATO;
 describe CONTRATOS_DE_MANDATO;
 
 delete from CONTRATOS_DE_MANDATO;
+
+INSERT INTO contratos_de_mandato VALUES('AA0001','472',TO_DATE('2016/01/15','YYYY/MM/DD'),TO_DATE('2017/01/15','YYYY/MM/DD'),420,'AAAA1');
+INSERT INTO contratos_de_mandato VALUES('AA0002','812',TO_DATE('2016/01/05','YYYY/MM/DD'),TO_DATE('2017/01/05','YYYY/MM/DD'),550,'AAAA2');
+INSERT INTO contratos_de_mandato VALUES('AA0003','472',TO_DATE('2016/01/25','YYYY/MM/DD'),TO_DATE('2017/01/25','YYYY/MM/DD'),420,'AAAA5');
+INSERT INTO contratos_de_mandato VALUES('AA0004','1186',TO_DATE('2016/01/12','YYYY/MM/DD'),TO_DATE('2017/01/12','YYYY/MM/DD'),720,'AAAA3');
+INSERT INTO contratos_de_mandato VALUES('AA0005','472',TO_DATE('2016/02/05','YYYY/MM/DD'),TO_DATE('2017/02/05','YYYY/MM/DD'),400,'AAAA4');
+INSERT INTO contratos_de_mandato VALUES('AA0006','389',TO_DATE('2016/02/07','YYYY/MM/DD'),TO_DATE('2017/02/07','YYYY/MM/DD'),400,'AAAA4');
