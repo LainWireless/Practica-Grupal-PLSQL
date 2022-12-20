@@ -68,10 +68,25 @@ BEGIN
     IF vrecibo.v_status_table > 0 THEN
         FOR v_cur in vrecibo.info_recibo.FIRST.. vrecibo.info_recibo.LAST LOOP
             select comprobar_fecha_recibos(:NEW.FECHA,INDICE2,:NEW.DNI,:NEW.CODCOMUNIDAD) into v_rfecha from dual;
+            validacion_fechas(INDICE2,v_rfecha,contador);
         END LOOP;
         contador := 0;
         vrecibo.info_recibo.DELETE;
     end if;
+END;
+/
+
+-- Procedimiento para validar las fechas de los recibos:
+create or replace procedure validacion_fechas(p_indice2 in out NUMBER, p_rfecha in out NUMBER, p_contador in out NUMBER)
+IS
+BEGIN
+    IF p_rfecha = 1 THEN
+        p_contador := p_contador + 1;
+    END IF; 
+    IF p_contador = 1 THEN
+        RAISE_APPLICATION_ERROR(-20001, 'No se puede emitir un recibo a un propietario en menos de 30 días.');
+    END IF;
+    p_indice2 := p_indice2 + 1;
 END;
 /
 
