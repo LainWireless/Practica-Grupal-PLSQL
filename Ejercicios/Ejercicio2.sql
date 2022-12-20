@@ -117,6 +117,7 @@ BEGIN
 END;
 /
 
+
 CREATE OR REPLACE function devolver_total_adeudado_comunidad(p_codcomunidad comunidades.codcomunidad%type)
 return varchar2
 IS
