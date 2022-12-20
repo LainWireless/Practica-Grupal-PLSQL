@@ -77,3 +77,89 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+
+-- Función que comprueba que el valor introducido en honorarios anuales es correcto:
+CREATE OR REPLACE FUNCTION comprobar_honorarios_anuales(p_codcomunidad in VARCHAR(4000))
+RETURNS INT
+AS $$
+DECLARE
+  v_honorarios_anuales INT;
+  v_num_propiedades INT;
+BEGIN
+  SELECT COUNT(*) INTO v_num_propiedades FROM propiedades WHERE codcomunidad = p_codcomunidad;
+  IF v_num_propiedades BETWEEN 1 AND 5 THEN
+    v_honorarios_anuales:= 600;
+  ELSIF v_num_propiedades BETWEEN 6 AND 10 THEN
+    v_honorarios_anuales:= 1000;
+  ELSIF v_num_propiedades BETWEEN 11 AND 20 THEN
+    v_honorarios_anuales:= 1800;
+  ELSIF v_num_propiedades > 20 THEN
+    v_honorarios_anuales:= 2500;
+  END IF;
+  RETURN v_honorarios_anuales;
+END;
+$$ LANGUAGE plpgsql;
+
+
+-- Función que comprueba que el valor introducido en honorarios anuales es correcto dependiendo del número de locales.
+CREATE OR REPLACE FUNCTION comprobar_honorarios_locales(p_codcomunidad in VARCHAR(4000))
+RETURNS INT
+AS $$
+DECLARE
+  v_honorarios_locales INT;
+  v_num_locales INT;
+BEGIN
+  SELECT COUNT(*) INTO v_num_locales FROM locales WHERE codcomunidad = p_codcomunidad;
+  IF v_num_locales > 0 THEN
+    v_honorarios_locales:= 1.2;
+  END IF;
+  RETURN v_honorarios_locales;
+END;
+$$ LANGUAGE plpgsql;
+
+
+-- Función que comprueba que el valor introducido en honorarios anuales es correcto dependiendo del número de oficinas.
+CREATE OR REPLACE FUNCTION comprobar_honorarios_oficinas(p_codcomunidad in VARCHAR(4000))
+RETURNS INT
+AS $$
+DECLARE
+  v_honorarios_oficinas INT;
+  v_num_oficinas INT;
+BEGIN
+  SELECT COUNT(*) INTO v_num_oficinas FROM oficinas WHERE codcomunidad = p_codcomunidad;
+  IF v_num_oficinas > 0 THEN
+    v_honorarios_oficinas:= 1.1;
+  END IF;
+  RETURN v_honorarios_oficinas;
+END;
+$$ LANGUAGE plpgsql;
+
+
+
+-- Función para el trigger que comprueba que el valor introducido en honorarios anuales es correcto.
+-- Utiliza las funciones comprobar_honorarios, comprobar_honorarios_locales y comprobar_honorarios_oficinas.
+CREATE OR REPLACE FUNCTION comprobar_honorarios() 
+RETURNS TRIGGER 
+AS $$
+  DECLARE
+    v_honorarios_anuales INT;
+    v_honorarios_locales INT;
+    v_honorarios_oficinas INT;
+  BEGIN
+    SELECT comprobar_honorarios_anuales(new.codcomunidad) INTO v_honorarios_anuales;
+    SELECT comprobar_honorarios_locales(new.codcomunidad) INTO v_honorarios_locales;
+    SELECT comprobar_honorarios_oficinas(new.codcomunidad) INTO v_honorarios_oficinas;
+    IF new.honorarios_anuales <> v_honorarios_anuales * v_honorarios_locales * v_honorarios_oficinas THEN
+      RAISE EXCEPTION 'El valor de honorarios anuales no es correcto.';
+    END IF;
+    RETURN NEW;
+  END;
+$$ LANGUAGE plpgsql;
+
+
+-- Trigger que compruebe que el valor introducido en honorarios anuales es correcto.
+-- Utiliza la función comprobar_honorarios.
+CREATE TRIGGER t_comprobar_honorarios 
+BEFORE INSERT OR UPDATE ON contratos_de_mandato
+FOR EACH ROW
+EXECUTE PROCEDURE comprobar_honorarios();
