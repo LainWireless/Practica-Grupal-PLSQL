@@ -25,7 +25,7 @@ begin
     raise No_comercial;
   end if;
   -- Obtener el estado del local
-  select count(*) into p_resultado from horarios where codpropiedad = p_codpropiedad and sysdate between hora_apertura and hora_cierre;
+  select count(*) into p_resultado from HORARIOS_APERTURA where codpropiedad = p_codpropiedad and sysdate between hora_apertura and hora_cierre;
   -- Devolver el resultado
   return p_resultado;
 exception
@@ -54,13 +54,3 @@ begin
   end if;
 end ejercicio1_main;
 /
-
-
-
-
-
-
-
-
-
-
