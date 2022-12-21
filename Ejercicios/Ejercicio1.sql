@@ -14,7 +14,7 @@ exception
 end ejercicio1_main;
 /
 
-create or replace function ejercicio11 (p_codcomunidad comunidades.codcomunidad%type, p_codpropiedad propiedades.codpropiedad%type)
+create or replace function ejercicio1 (p_codcomunidad comunidades.codcomunidad%type, p_codpropiedad propiedades.codpropiedad%type)
 return number
 is
   p_resultado number;
