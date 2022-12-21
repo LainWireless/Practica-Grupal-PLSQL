@@ -310,6 +310,7 @@ INSERT INTO horarios_apertura VALUES('AAAA3','0001','Miercoles',TO_DATE('10:00',
 INSERT INTO horarios_apertura VALUES('AAAA3','0001','Jueves',TO_DATE('10:00','HH24:MI'),TO_DATE('20:00','HH24:MI'));
 INSERT INTO horarios_apertura VALUES('AAAA3','0001','Viernes',TO_DATE('10:00','HH24:MI'),TO_DATE('20:00','HH24:MI'));
 INSERT INTO horarios_apertura VALUES('AAAA3','0001','Sabado',TO_DATE('09:00','HH24:MI'),TO_DATE('13:00','HH24:MI'));
+INSERT INTO horarios_apertura VALUES('AAAA1','0002','Lunes',TO_DATE('08:00','HH24:MI'),TO_DATE('22:54','HH24:MI'));
 
 
 --Tabla viviendas
