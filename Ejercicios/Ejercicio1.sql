@@ -26,17 +26,14 @@ begin
   if p_resultado = 0 then
     raise No_comunidad;
   end if;
-
   select count(*) into p_resultado from propiedades where codcomunidad=p_codcomunidad and codpropiedad = p_codpropiedad;
   if p_resultado = 0 then
     raise No_propiedad;
   end if;
-
   select count(*) into p_resultado from locales where codpropiedad=p_codpropiedad and codcomunidad=p_codcomunidad;
   if p_resultado = 0 then
     raise No_comercial;
   end if;
-
   select count(*) into p_resultado from horarios_apertura where codcomunidad=p_codcomunidad and codpropiedad=p_codpropiedad and to_char(LOCALTIMESTAMP, 'HH:MI:SS') between to_char(hora_apertura, 'HH:MI:SS') and to_char(hora_cierre, 'HH:MI:SS');
   return p_resultado;
 exception
