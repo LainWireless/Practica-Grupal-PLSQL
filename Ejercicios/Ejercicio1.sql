@@ -22,27 +22,22 @@ is
   No_propiedad exception;
   No_comercial exception;
 begin
-  -- Comprobar si existe la comunidad
   select count(*) into p_resultado from comunidades where codcomunidad=p_codcomunidad;
   if p_resultado = 0 then
-   -- RAISE_APPLICATION_ERROR(-20001, 'La comunidad introducida no existe');
     raise No_comunidad;
   end if;
-  -- Comprobar si existe la propiedad en esa comunidad
+
   select count(*) into p_resultado from propiedades where codcomunidad=p_codcomunidad and codpropiedad = p_codpropiedad;
   if p_resultado = 0 then
-   -- RAISE_APPLICATION_ERROR(-20002, 'La propiedad introducida no existe en esa comunidad');
     raise No_propiedad;
   end if;
-  -- Comprobar si la propiedad es un local comercial
+
   select count(*) into p_resultado from locales where codpropiedad=p_codpropiedad and codcomunidad=p_codcomunidad;
   if p_resultado = 0 then
-   -- RAISE_APPLICATION_ERROR(-20003, 'La propiedad introducida no es comercial');
     raise No_comercial;
   end if;
-  -- Obtener el estado del local
+
   select count(*) into p_resultado from horarios_apertura where codcomunidad=p_codcomunidad and codpropiedad=p_codpropiedad and to_char(LOCALTIMESTAMP, 'HH:MI:SS') between to_char(hora_apertura, 'HH:MI:SS') and to_char(hora_cierre, 'HH:MI:SS');
-  -- Devolver el resultado
   return p_resultado;
 exception
   when No_comunidad then
