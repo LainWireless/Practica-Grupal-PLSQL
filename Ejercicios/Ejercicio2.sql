@@ -34,19 +34,25 @@ begin
     infocomunidad(p_codcomunidad, v_aux1, v_aux2, v_aux3);
     dbms_output.put_line(chr(10)||chr(9)||'Comunidad: '||v_aux1);
     dbms_output.put_line(chr(10)||chr(9)||'Poblacion: '||v_aux2||chr(9)||'Codigo Postal: '||v_aux3);
+    dbms_output.put_line(chr(10)||chr(9)||'Fecha: '||p_fecha);
     for x in v_cargos loop
         datosdirectiva(x.dni, v_aux4, v_aux5, v_aux6);
         case contador
             when 1 then
-                dbms_output.put_line(chr(10)||chr(9)||'Presidente D.'||v_aux4||' '||v_aux5||' '|v_aux6);
+                dbms_output.put_line(chr(10)||chr(9)||'Presidente D.'||v_aux4||' '||v_aux5||' '||v_aux6);
             when 2 then
-                dbms_output.put_line(chr(10)||chr(9)||'Vicepresidente D.'||v_aux4||' '||v_aux5||' '|v_aux6);
+                dbms_output.put_line(chr(10)||chr(9)||'Vicepresidente D.'||v_aux4||' '||v_aux5||' '||v_aux6);
                 dbms_output.put_line(chr(10)||chr(9)||'Vocales:');
             when 3 then
-                dbms_output.put_line(chr(10)||chr(9)||chr(9)||'D.'||v_aux4||' '||v_aux5||' '|v_aux6);
+                dbms_output.put_line(chr(10)||chr(9)||chr(9)||'D.'||v_aux4||' '||v_aux5||' '||v_aux6);
             when 4 then
-                dbms_output.put_line(chr(10)||chr(9)||chr(9)||'D.'||v_aux4||' '||v_aux5||' '|v_aux6);
+                dbms_output.put_line(chr(10)||chr(9)||chr(9)||'D.'||v_aux4||' '||v_aux5||' '||v_aux6);
+        end case;
+        contador:=contador+1;
     end loop;
+exception
+    when others then
+        null;
 end Tipo1;
 /
 
@@ -54,40 +60,43 @@ create or replace procedure comprobaciones(p_codcomunidad comunidades.codcomunid
 is
     v_exception varchar2(10);
     Comunidad_noexiste exception;
+    Nopropiedades_fecha exception;
 begin
     select count(dni) into v_exception from historial_cargos where codcomunidad=p_codcomunidad;
     if v_exception=0 then
         raise Comunidad_noexiste;
+    end if;
     select count(dni) into v_exception from historial_cargos where codcomunidad=p_codcomunidad and p_fecha between fecha_inicio and fecha_fin;
     if v_exception=0 then
         raise Nopropiedades_fecha;
+    end if;
 exception
     when Comunidad_noexiste then
-        dbms_output.put_line('No existe esa comunidad');
+        dbms_output.put_line('No existe esa comunidad.');
         raise;
     when Nopropiedades_fecha then
-        dbms_output.put_line('No existen datos de esa comunidad en esa fecha');
+        dbms_output.put_line('No existen datos de esa comunidad en esa fecha.');
         raise;
 end comprobaciones;
 /
 
-create or replace procedure infocomunidad(p_codcomunidad comunidad.codcomunidad%type, v_aux1 out varchar2(60), v_aux2 out varchar2(60), v_aux3 out varchar2(60))
+create or replace procedure infocomunidad(p_codcomunidad comunidades.codcomunidad%type, v_aux1 out varchar2, v_aux2 out varchar2, v_aux3 out varchar2)
 is
 begin
-    v_aux1 := select nombre from comunidades where codcomunidad=p_codcomunidad;
-    v_aux2 := select poblacion from comunidades where codcomunidad=p_codcomunidad;
-    v_aux3 := select codigopostal from comunidades where codcomunidad=p_codcomunidad;
+    select nombre into v_aux1 from comunidades where codcomunidad=p_codcomunidad;
+    select poblacion into v_aux2 from comunidades where codcomunidad=p_codcomunidad;
+    select codigopostal into v_aux3 from comunidades where codcomunidad=p_codcomunidad;
 end infocomunidad;
 /
 
-create or replace procedure datosdirectiva(x.dni historial_cargos.dni%type, v_aux4 out propietarios.nombre%type, v_aux5 out propietarios.apellidos%type, v_aux6 out propietarios.tlf_contacto%type)
+create or replace procedure datosdirectiva(x_dni historial_cargos.dni%type, v_aux4 out propietarios.nombre%type, v_aux5 out propietarios.apellidos%type, v_aux6 out propietarios.tlf_contacto%type)
 is
 begin
-    v_aux4 := select nombre from propietarios where dni=x.dni;
-    v_aux5 := select apellidos from propietarios where dni=x.dni;
-    v_aux6 := select tlf_contacto from propietarios where dni=x-dni;
+    select nombre into v_aux4 from propietarios where dni=x_dni;
+    select apellidos into v_aux5 from propietarios where dni=x_dni;
+    select tlf_contacto into v_aux6 from propietarios where dni=x_dni;
 end datosdirectiva;
-
+/
 
 --Procedimiento recibos_impagados (Tipo2) -- Realizado por Alfonso Roldán
 
@@ -197,7 +206,6 @@ create or replace procedure informe_de_propiedades(p_codcomunidad varchar2)
 is
 begin
     dbms_output.put_line(chr(10)||'INFORME DE PROPIEDADES');
-exception
 end;
 /
 
