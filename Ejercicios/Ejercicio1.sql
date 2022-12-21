@@ -23,6 +23,7 @@ begin
   select count(*) into p_resultado from horarios_apertura where codcomunidad=p_codcomunidad and codpropiedad=p_codpropiedad and to_char(LOCALTIMESTAMP, 'HH:MI:SS') between to_char(hora_apertura, 'HH:MI:SS') and to_char(hora_cierre, 'HH:MI:SS');
   return p_resultado;
 end ejercicio1;
+/
 
 create or replace procedure comprobar_excepciones_ej1 (p_codcomunidad comunidades.codcomunidad%type, p_codpropiedad propiedades.codpropiedad%type)
 is
@@ -53,3 +54,4 @@ exception
     dbms_output.put_line('La propiedad introducida no es comercial.');
     raise;
 end comprobar_excepciones_ej1;
+/
