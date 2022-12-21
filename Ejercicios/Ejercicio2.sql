@@ -30,7 +30,7 @@ is
     contador number:=1;
 begin
     comprobaciones(p_codcomunidad, p_fecha);
-    dbms_output.put_line(chr(10)||'INFORME DE CARGOS');
+    dbms_output.put_line(chr(10)||'INFORME DE CARGOS:');
     infocomunidad(p_codcomunidad, v_aux1, v_aux2, v_aux3);
     dbms_output.put_line(chr(10)||chr(9)||'Comunidad: '||v_aux1);
     dbms_output.put_line(chr(10)||chr(9)||'Poblacion: '||v_aux2||chr(9)||'Codigo Postal: '||v_aux3);
