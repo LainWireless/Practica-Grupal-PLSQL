@@ -2,7 +2,7 @@ create or replace procedure ejercicio1_main (p_codcomunidad comunidades.codcomun
 is
   v_estado number;
 begin
-  v_estado:=ejercicio11(p_codcomunidad, p_codpropiedad);
+  v_estado:=ejercicio1(p_codcomunidad, p_codpropiedad);
   if v_estado = 1 then
     dbms_output.put_line('Estado del local: Abierto.');
   else
@@ -18,6 +18,14 @@ create or replace function ejercicio11 (p_codcomunidad comunidades.codcomunidad%
 return number
 is
   p_resultado number;
+begin
+  comprobar_excepciones_ej1(p_codcomunidad, p_codpropiedad);
+  select count(*) into p_resultado from horarios_apertura where codcomunidad=p_codcomunidad and codpropiedad=p_codpropiedad and to_char(LOCALTIMESTAMP, 'HH:MI:SS') between to_char(hora_apertura, 'HH:MI:SS') and to_char(hora_cierre, 'HH:MI:SS');
+  return p_resultado;
+end ejercicio1;
+
+create or replace procedure comprobar_excepciones_ej1 (p_codcomunidad comunidades.codcomunidad%type, p_codpropiedad propiedades.codpropiedad%type)
+is
   No_comunidad exception;
   No_propiedad exception;
   No_comercial exception;
@@ -34,8 +42,6 @@ begin
   if p_resultado = 0 then
     raise No_comercial;
   end if;
-  select count(*) into p_resultado from horarios_apertura where codcomunidad=p_codcomunidad and codpropiedad=p_codpropiedad and to_char(LOCALTIMESTAMP, 'HH:MI:SS') between to_char(hora_apertura, 'HH:MI:SS') and to_char(hora_cierre, 'HH:MI:SS');
-  return p_resultado;
 exception
   when No_comunidad then
     dbms_output.put_line('La comunidad introducida no existe.');
@@ -46,5 +52,4 @@ exception
   when No_comercial then
     dbms_output.put_line('La propiedad introducida no es comercial.');
     raise;
-end ejercicio11;
-/
+end comprobar_excepciones_ej1;
