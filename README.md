@@ -14,6 +14,32 @@ Se adjuntan los siguientes cinco documentos:
 
 Se realizarán los ocho ejercicios en ORACLE y dos de ellos se harán también en Postgres.
 
+# Enunciado Ejercicio 1: Realiza una función que reciba un código de comunidad y un código de propiedad y, en caso de que se trate de un local nos devuelva un 1 si está abierto o un 0 si está cerrado en el momento de la ejecución de la función. Debes contemplar las siguientes excepciones: Comunidad Inexistente, Propiedad Inexistente en esa Comunidad, La propiedad no es un local comercial.
+
+## Comprobaciones del ejercicio 1:
+ - Se comprobará que funcionen todas las excepciones pedidas.
+ - Se comprobará que da como resultado cerrado o abierto segun el horario. El horario mas tarde es a las 20:00, recomiendo hacer el siguiente insert para tener un local abierto todo el día y realizar las pruebas necesarias.
+```sql
+INSERT INTO horarios_apertura VALUES('AAAA1','0002','Lunes',TO_DATE('08:00','HH24:MI'),TO_DATE('22:54','HH24:MI'));
+```
+## Captura con todas las pruebas mencionadas anteriormente.
+![Imagen](capturas/Ejercicio1.png)
+
+# Enunciado Ejercicio 2: Realiza un procedimiento llamado MostrarInformes, que recibirá tres parámetros, siendo el primero de ellos un número que indicará el tipo de informe a mostrar. Estos tipos pueden ser los siguientes:
+
+## Informe Tipo 1: Informe de cargos. Este informe recibe como segundo parámetro el código de una comunidad y como tercer parámetro una fecha, mostrando la junta directiva que tenía dicha comunidad en esa fecha con el siguiente formato:
+
+### Comprobaciones del informe tipo 1:
+ - Este informe se compone de 4 procedimientos que son los siguientes:
+  1. Procedimiento principal: Será el encargado de llamar los otros procedimientos y de mostrar el resultado final.
+  2. Procedimiento para comprobar excepciones: En este se realizará comprobaciones que harán saltar algunos raise si los datos no son correctos.
+  3. Procedimiento "infocomunidad" y "datosdirectivas": Estos dos procedimientos se encargan de recolectar la información requerida para mostrar los datos de la comunidad y del equipo directivo.
+ - Por último debo mencionar que en el enunciado se pide mostrar en el informe un campo llamado "Secretarios". Este campo no se menciona en ningún momento en el enunciado de la fase 1, tampoco aparece en el diagrama de la fase 2, y ninguna tabla contiene información respecto a este puesto de la junta directiva. Al ser un campo que no existe y nunca mostraría información he preferido eliminarlo directamente del informe.
+
+### Captura donde se ve el funcionamiento de las excepciones y el resultado del informe.
+
+![Imagen](capturas/Ejercicio2_tipo1.png)
+
 # Enunciado Ejercicio 3:
 ## Realizar un trigger que actualice los honorarios anuales de un contrato de mandato de acuerdo a lo siguiente:
 - Si el número de Propiedades de la comunidad a la que pertenece el contrato de mandato es de 1 a 5, los Honorarios Anuales serán de 600

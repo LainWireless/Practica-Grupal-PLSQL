@@ -46,13 +46,13 @@ begin
   return p_resultado;
 exception
   when No_comunidad then
-    dbms_output.put_line('La comunidad introducida no existe');
+    dbms_output.put_line('La comunidad introducida no existe.');
     raise;
   when No_propiedad then
-    dbms_output.put_line('La propiedad introducida no existe en esa comunidad');
+    dbms_output.put_line('La propiedad introducida no existe en esa comunidad.');
     raise;
   when No_comercial then
-    dbms_output.put_line('La propiedad introducida no es comercial');
+    dbms_output.put_line('La propiedad introducida no es comercial.');
     raise;
 end ejercicio11;
 /
