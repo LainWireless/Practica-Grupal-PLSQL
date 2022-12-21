@@ -50,6 +50,8 @@ begin
         end case;
         contador:=contador+1;
     end loop;
+    contador:=contador-1;
+    dbms_output.put_line(chr(10)||chr(9)||'Numero de Directivos: '||contador);
 exception
     when others then
         null;
