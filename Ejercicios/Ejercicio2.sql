@@ -202,17 +202,9 @@ END;
 /
 
 
---Procedimiento informe_de_propiedades (Tipo3)
-
-create or replace procedure informe_de_propiedades(p_codcomunidad varchar2)
-is
-begin
-    dbms_output.put_line(chr(10)||'INFORME DE PROPIEDADES');
-end;
-/
 
 
-
+-- Procedimiento informe_de_propiedades (Tipo3). Realizado por Felipe e Iván.
 
 create or replace procedure informe_de_propiedades(p_codcomunidad varchar2)
 is
