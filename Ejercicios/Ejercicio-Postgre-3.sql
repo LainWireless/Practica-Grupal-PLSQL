@@ -1,3 +1,4 @@
+-- Realizado por Iván.
 
 -- Procedimiento que dependiendo del número de propiedades
 -- que tenga la comunidad, le asigna unos honorarios anuales u otros.
