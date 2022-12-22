@@ -1,3 +1,6 @@
+
+--PROCEDIMIENTO PRINCIPAL
+
 create or replace procedure GenerarInformes(p_num number, p_codcomunidad comunidades.codcomunidad%type, p_fecha date)
 is
 begin
@@ -107,6 +110,7 @@ begin
 end datosdirectiva;
 /
 
+
 --Procedimiento recibos_impagados (Tipo2) -- Realizado por Alfonso Roldán
 
 create or replace procedure recibos_impagados(p_codcomunidad comunidades.codcomunidad%type)
@@ -129,7 +133,7 @@ end;
 /
 
 
---PROCEDIMIENTOS Y FUNCIONES DEPENDIENTES 
+--Funciones y procedimientos dependientes 
 
 create or replace function devolver_fecha_actual
 return DATE
@@ -209,78 +213,27 @@ END;
 /
 
 
-
-
--- Procedimiento informe_de_propiedades (Tipo3). Realizado por Felipe e Iván.
+--Procedimiento informe_de_propiedades (Tipo3). Realizado por Felipe, Iván y Alfonso.
 
 create or replace procedure informe_de_propiedades(p_codcomunidad varchar2)
 is
     cursor c_propietarios is
-    select dni, nombre, apellidos 
-    from PROPIETARIOS where dni IN
-    (select DNI_PROPIETARIO from PROPIEDADES 
-    where CODCOMUNIDAD = p_codcomunidad) order by nombre;
-  v_propietario c_propietarios%rowtype;
-  v_cont number := 1;    
+    select dni, nombre, apellidos from PROPIETARIOS where dni IN (select DNI_PROPIETARIO from PROPIEDADES where CODCOMUNIDAD = p_codcomunidad) order by nombre;
+    v_cont number := 1;    
 begin
     dbms_output.put_line(chr(10)||'INFORME DE PROPIEDADES'||chr(10)||chr(10)||'Comunidad: '||devolver_nombrecomunidad(p_codcomunidad)||chr(10));
     dbms_output.put_line(devolver_poblacioncomunidad(p_codcomunidad)||' '||devolver_codpostalcomunidad(p_codcomunidad)||chr(10));
     for v_propietario in c_propietarios loop
         dbms_output.put_line('Propietario'||v_cont||': D.'||v_propietario.nombre||' '||v_propietario.apellidos||chr(10));
         listar_porcentaje_participacion(v_propietario.dni);
-        dbms_output.put_line(chr(10)||'Porcentaje de Participación Total '||v_propietario.nombre||' '||v_propietario.apellidos||': '||devolver_total_porcentaje_participacion(v_propietario.dni)||chr(10));
+        dbms_output.put_line(chr(10)||'Porcentaje de Participacion Total Propietario'||v_cont||': '||devolver_total_porcentaje_participacion(v_propietario.dni)||'%'||chr(10));
         v_cont := v_cont+1;
     end loop;
 end;
 /
 
-create or replace function devolver_nombrecomunidad(p_codcomunidad varchar2) return varchar2
-is
-  v_nombrecomunidad varchar2(30);
-begin
-  select nombre into v_nombrecomunidad
-  from comunidades
-  where codcomunidad = p_codcomunidad;
-  return v_nombrecomunidad;
-end;
-/
 
-create or replace function devolver_poblacioncomunidad(p_codcomunidad varchar2) return varchar2
-is
-  v_poblacioncomunidad varchar2(30);
-begin
-  select poblacion into v_poblacioncomunidad
-  from comunidades
-  where codcomunidad = p_codcomunidad;
-  return v_poblacioncomunidad;
-end;
-/
-
-create or replace function devolver_codpostalcomunidad(p_codcomunidad varchar2) return varchar2
-is
-  v_codpostalcomunidad varchar2(5);
-begin
-  select CODIGOPOSTAL into v_codpostalcomunidad
-  from comunidades
-  where codcomunidad = p_codcomunidad;
-  return v_codpostalcomunidad;
-end;
-/
-
-create or replace procedure listar_porcentaje_participacion(p_dni varchar2)
-is
-  cursor c_propiedades is
-    select codpropiedad, codcomunidad, portal, planta, letra, porcentaje_participacion
-    from propiedades
-    where DNI_PROPIETARIO = p_dni
-    order by codpropiedad;
-  v_propiedad c_propiedades%rowtype;
-begin
-  for v_propiedad in c_propiedades loop
-    dbms_output.put_line(v_propiedad.codpropiedad||' '||devolver_tipopropiedad(v_propiedad.codpropiedad,v_propiedad.codcomunidad)||' '||v_propiedad.portal||' '||v_propiedad.planta||' '||v_propiedad.letra||' '||v_propiedad.porcentaje_participacion||' '||devolver_inquilino(v_propiedad.codpropiedad,v_propiedad.codcomunidad));
-  end loop;
-end;
-/
+--Funciones y procedimientos dependientes (Algunos de los requeridos los encontramos en el tipo2)
 
 CREATE OR REPLACE FUNCTION devolver_tipopropiedad (p_codpropiedad VARCHAR2, p_codcomunidad VARCHAR2) RETURN VARCHAR2
 IS
@@ -294,12 +247,12 @@ BEGIN
       ELSE 'Desconocido'
     END INTO v_tipopropiedad
   FROM DUAL;
-  
   RETURN v_tipopropiedad;
 END;
 /
 
-create or replace function devolver_inquilino(p_codpropiedad varchar2, p_codcomunidad varchar2) return varchar2
+create or replace function devolver_inquilino(p_codpropiedad varchar2, p_codcomunidad varchar2) 
+return varchar2
 is
   v_inquilino varchar2(30);
 begin
@@ -307,10 +260,29 @@ begin
   from INQUILINOS
   where CODPROPIEDAD = p_codpropiedad and CODCOMUNIDAD = p_codcomunidad;
   return v_inquilino;
+exception
+    when no_data_found then
+        v_inquilino:='"Ningun inquilino registrado"';
+        return v_inquilino;
 end;
 /
 
-create or replace function devolver_total_porcentaje_participacion(p_dni varchar2) return number
+create or replace procedure listar_porcentaje_participacion(p_dni varchar2)
+is
+    cursor c_propiedades is
+    select codpropiedad, codcomunidad, portal, planta, letra, porcentaje_participacion
+    from propiedades
+    where DNI_PROPIETARIO = p_dni
+    order by codpropiedad;
+begin
+    for v_propiedad in c_propiedades loop
+    dbms_output.put_line(chr(9)||v_propiedad.codpropiedad||' '||devolver_tipopropiedad(v_propiedad.codpropiedad,v_propiedad.codcomunidad)||' '||v_propiedad.portal||' '||v_propiedad.planta||' '||v_propiedad.letra||' '||v_propiedad.porcentaje_participacion||' '||devolver_inquilino(v_propiedad.codpropiedad,v_propiedad.codcomunidad));
+  end loop;
+end;
+/
+
+create or replace function devolver_total_porcentaje_participacion(p_dni varchar2) 
+return number
 is
   v_total_porcentaje_participacion number;
 begin
@@ -320,84 +292,3 @@ begin
   return v_total_porcentaje_participacion;
 end;
 /
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
---Pruebas
-
-execute informe_de_propiedades('AAAA1');
-
-
-select * from PROPIEDADES;
-select * from COMUNIDADES;
-select * from INQUILINOS;
-select * from PROPIETARIOS;
-
-
-
-select CODCOMUNIDAD,CODPROPIEDAD from PROPIEDADES;
-select * from INQUILINOS;
-
-select codpropiedad, codcomunidad, portal, planta, letra, porcentaje_participacion
-    from propiedades
-    where DNI_PROPIETARIO = '49027387N' order by codpropiedad;
-
-
-
-
-declare
-    var varchar2(30);
-begin
-    select devolver_inquilino('0001','AAAA6') into var from dual;
-    dbms_output.put_line(var);
-end;
-/
-
-
-select NOMBRE from INQUILINOS
-  where CODPROPIEDAD = '0001' and CODCOMUNIDAD = 'AAAA1';
-
-select dni, nombre, apellidos from PROPIETARIOS where dni IN
-(select DNI_PROPIETARIO from PROPIEDADES where CODCOMUNIDAD = 'AAAA1') order by nombre;
-
-
-
-
-DECLARE
-    cursor v_cursor is 
-select VIVIENDAS.CODPROPIEDAD,PROPIEDADES.CODCOMUNIDAD from PROPIEDADES,VIVIENDAS
-WHERE PROPIEDADES.CODCOMUNIDAD = VIVIENDAS.CODCOMUNIDAD 
-and PROPIEDADES.CODPROPIEDAD = VIVIENDAS.CODPROPIEDAD;
-    var VARCHAR2(30);
-begin
-    for i in v_cursor LOOP
-        select devolver_tipopropiedad(i.CODPROPIEDAD,i.CODCOMUNIDAD) into var from dual;
-        dbms_output.put_line(var);
-    END LOOP;
-end;
-
-
-
-select OFICINAS.CODPROPIEDAD,PROPIEDADES.CODCOMUNIDAD from PROPIEDADES,OFICINAS
-WHERE PROPIEDADES.CODCOMUNIDAD = OFICINAS.CODCOMUNIDAD 
-and PROPIEDADES.CODPROPIEDAD = OFICINAS.CODPROPIEDAD;
-
-select LOCALES.CODPROPIEDAD,PROPIEDADES.CODCOMUNIDAD from PROPIEDADES,LOCALES
-WHERE PROPIEDADES.CODCOMUNIDAD = LOCALES.CODCOMUNIDAD 
-and PROPIEDADES.CODPROPIEDAD = LOCALES.CODPROPIEDAD;
-
-select VIVIENDAS.CODPROPIEDAD,PROPIEDADES.CODCOMUNIDAD from PROPIEDADES,VIVIENDAS
-WHERE PROPIEDADES.CODCOMUNIDAD = VIVIENDAS.CODCOMUNIDAD 
-and PROPIEDADES.CODPROPIEDAD = VIVIENDAS.CODPROPIEDAD;
