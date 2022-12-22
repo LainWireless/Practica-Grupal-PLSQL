@@ -20,21 +20,27 @@ end;
 
 create or replace procedure Tipo1(p_codcomunidad comunidades.codcomunidad%type, p_fecha date)
 is
-    v_aux1 varchar2(60);
-    v_aux2 varchar2(60);
-    v_aux3 varchar2(60);
-    v_aux4 propietarios.nombre%type;
-    v_aux5 propietarios.apellidos%type;
-    v_aux6 propietarios.tlf_contacto%type;
-    cursor v_cargos is select nombre_cargo, dni from historial_cargos where codcomunidad=p_codcomunidad and p_fecha between fecha_inicio and fecha_fin order by nombre_cargo;
     contador number:=1;
 begin
     comprobaciones(p_codcomunidad, p_fecha);
     dbms_output.put_line(chr(10)||'INFORME DE CARGOS:');
-    infocomunidad(p_codcomunidad, v_aux1, v_aux2, v_aux3);
-    dbms_output.put_line(chr(10)||chr(9)||'Comunidad: '||v_aux1);
-    dbms_output.put_line(chr(10)||chr(9)||'Poblacion: '||v_aux2||chr(9)||'Codigo Postal: '||v_aux3);
-    dbms_output.put_line(chr(10)||chr(9)||'Fecha: '||p_fecha);
+    infocomunidad(p_codcomunidad, p_fecha);
+    informecomunidad(p_codcomunidad, p_fecha, contador);
+    contador:=contador-1;
+    dbms_output.put_line(chr(10)||chr(9)||'Numero de Directivos: '||contador);
+exception
+    when others then
+        null;
+end Tipo1;
+/
+
+create or replace procedure informecomunidad(p_codcomunidad comunidades.codcomunidad%type, p_fecha date, contador in out number)
+is
+    v_aux4 propietarios.nombre%type;
+    v_aux5 propietarios.apellidos%type;
+    v_aux6 propietarios.tlf_contacto%type;
+    cursor v_cargos is select nombre_cargo, dni from historial_cargos where codcomunidad=p_codcomunidad and p_fecha between fecha_inicio and fecha_fin order by nombre_cargo;
+begin
     for x in v_cargos loop
         datosdirectiva(x.dni, v_aux4, v_aux5, v_aux6);
         case contador
@@ -50,12 +56,7 @@ begin
         end case;
         contador:=contador+1;
     end loop;
-    contador:=contador-1;
-    dbms_output.put_line(chr(10)||chr(9)||'Numero de Directivos: '||contador);
-exception
-    when others then
-        null;
-end Tipo1;
+end informecomunidad;
 /
 
 create or replace procedure comprobaciones(p_codcomunidad comunidades.codcomunidad%type, p_fecha date)
@@ -82,12 +83,18 @@ exception
 end comprobaciones;
 /
 
-create or replace procedure infocomunidad(p_codcomunidad comunidades.codcomunidad%type, v_aux1 out varchar2, v_aux2 out varchar2, v_aux3 out varchar2)
+create or replace procedure infocomunidad(p_codcomunidad comunidades.codcomunidad%type, p_fecha date)
 is
+    v_aux1 varchar2(60);
+    v_aux2 varchar2(60);
+    v_aux3 varchar2(60);
 begin
     select nombre into v_aux1 from comunidades where codcomunidad=p_codcomunidad;
     select poblacion into v_aux2 from comunidades where codcomunidad=p_codcomunidad;
     select codigopostal into v_aux3 from comunidades where codcomunidad=p_codcomunidad;
+    dbms_output.put_line(chr(10)||chr(9)||'Comunidad: '||v_aux1);
+    dbms_output.put_line(chr(10)||chr(9)||'Poblacion: '||v_aux2||chr(9)||'Codigo Postal: '||v_aux3);
+    dbms_output.put_line(chr(10)||chr(9)||'Fecha: '||p_fecha);
 end infocomunidad;
 /
 
