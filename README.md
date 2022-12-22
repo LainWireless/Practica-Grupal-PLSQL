@@ -18,6 +18,8 @@ Se realizarán los ocho ejercicios en ORACLE y dos de ellos se harán también e
 
 ## Ejercicio 1
 
+### Enunciado
+
 Realiza una función que reciba un **código de comunidad** y un **código de propiedad** y, en caso de que se trate de un local nos devuelva un **1** si está abierto o un **0** si está cerrado en el momento de la ejecución de la función. Debes contemplar las siguientes excepciones: **Comunidad Inexistente**, **Propiedad Inexistente** en esa Comunidad, La propiedad **no es un local comercial**.
 
 ### Comprobaciones
@@ -35,6 +37,8 @@ INSERT INTO horarios_apertura VALUES('AAAA1','0002','Lunes',TO_DATE('08:00','HH2
 
 
 ## Ejercicio 2
+
+### Enunciado
 
 Realiza un procedimiento llamado **MostrarInformes**, que recibirá tres parámetros, siendo el primero de ellos un
 número que indicará el tipo de informe a mostrar. Estos tipos pueden ser los siguientes:
@@ -130,6 +134,8 @@ Por último debo mencionar que en el enunciado se pide mostrar en el informe un 
 
 ## Ejercicio 3
 
+### Enunciado
+
 Realiza los módulos de programación necesarios para que los honorarios anuales correspondientes a un contrato de mandato vayan en función del número de propiedades de la comunidad y de la existencia o no de locales y oficinas, de acuerdo con la siguiente tabla:
 
 
@@ -196,6 +202,8 @@ Select de la tabla **CONTRATOS_DE_MANDATO** después de ejecutar el procedimient
 
 ## Ejercicio 4
 
+### Enunciado
+
 Realiza los módulos de programación necesarios para que cuando se abone un recibo que lleve más de un año impagado se avise por correo electrónico al presidente de la comunidad y al administrador que tiene un contrato de mandato vigente con la comunidad correspondiente. Añade el campo e-mail tanto a la tabla Propietarios como Administradores.
 
 ### Prueba de funcionamiento
@@ -214,6 +222,8 @@ Ahora revisaremos los logs del servidor de correos para comprobar como realmente
 
 
 ## Ejercicio 5
+
+### Enunciado
 
 Añade una columna ImportePendiente en la columna Propietarios y rellénalo con la suma de los importes de los recibos pendientes de pago de cada propietario. Realiza los módulos de programación necesarios para que los datos de la columna sean siempre coherentes con los datos que se encuentran en la tabla Recibos.
 
@@ -267,6 +277,8 @@ select nombre, dni, importependiente from propietarios where dni='K6022994B';
 
 ## Ejercicio 6
 
+### Enunciado
+
 Realiza los módulos de programación necesarios para evitar que un propietario pueda ocupar dos cargos diferentes en la misma comunidad de forma simultánea.
 
 ### Prueba de funcionamiento
@@ -285,6 +297,8 @@ Realiza los módulos de programación necesarios para evitar que un propietario 
 
 ## Ejercicio 7
 
+### Enunciado
+
 Realiza los módulos de programación necesarios para evitar que un administrador gestione más de cuatro comunidades de forma simultánea.
 
 ### Prueba de funcionamiento
@@ -299,6 +313,8 @@ Realiza los módulos de programación necesarios para evitar que un administrado
 
 
 ## Ejercicio 8
+
+### Enunciado
 
 Realiza los módulos de programación necesarios para evitar que se emitan dos recibos a un mismo propietario en menos de 30 días.
 
