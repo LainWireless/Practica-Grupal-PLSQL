@@ -16,7 +16,7 @@ end;
 /
 
 
---Procedimiento informe_de_cargos (Tipo1)
+--Procedimiento informe_de_cargos (Tipo1) davidrg
 
 create or replace procedure Tipo1(p_codcomunidad comunidades.codcomunidad%type, p_fecha date)
 is
