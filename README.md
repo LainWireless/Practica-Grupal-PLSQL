@@ -105,8 +105,9 @@ INSERT INTO recibos_cuotas VALUES('0021','AAAA1','K6022994B',TO_DATE('2016/02/15
 ```
 ![Imagen](capturas/ejercicio5-postgre-prueba.png)
 
-- Realizamos la siguiente consulta y podremos ver como Luisa tiene el valor 50 en la columna "ImportePendiente".
+- Realizamos las siguientes consultas y podremos ver como Luisa tiene el valor 50 en la columna "ImportePendiente".
 ```sql
+select * from recibos_cuotas;
 select nombre, dni, importependiente from propietarios where dni='K6022994B';
 ```
 ![Imagen](capturas/ejercicio5-postgre-prueba2.png)
