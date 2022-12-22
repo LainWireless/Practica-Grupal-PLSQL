@@ -48,7 +48,7 @@ END;
 
 --En este caso insertaré algunos registros en la tabla recibos_cuotas, seleccionando el valor del campo "Pagado" a "No" y añadiendo el DNI de algún propietario que tenga el valor 0 en la columna "ImportePendiente" en este caso (Luisa).
 
---Insercción de datos.
+--Inserción de datos.
 
 INSERT INTO recibos_cuotas VALUES('0016','AAAA1','K6022994B',TO_DATE('2016/02/15','YYYY/MM/DD'),25,'No');
 INSERT INTO recibos_cuotas VALUES('0017','AAAA1','K6022994B',TO_DATE('2016/02/15','YYYY/MM/DD'),25,'No');
