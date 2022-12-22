@@ -1,3 +1,4 @@
+-- davidrg
 create or replace procedure ejercicio1_main (p_codcomunidad comunidades.codcomunidad%type, p_codpropiedad propiedades.codpropiedad%type)
 is
   v_estado number;
