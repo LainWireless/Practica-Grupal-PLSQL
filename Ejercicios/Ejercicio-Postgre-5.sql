@@ -43,5 +43,3 @@ CREATE TRIGGER t_sync_importependiente
 BEFORE INSERT OR UPDATE OR DELETE ON recibos_cuotas
 FOR EACH ROW
 EXECUTE PROCEDURE F_Rellenar_ImportePendiente();
-
-drop trigger t_sync_importependiente on recibos_cuotas;
