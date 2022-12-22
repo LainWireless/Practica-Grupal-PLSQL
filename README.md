@@ -271,12 +271,31 @@ Realiza los módulos de programación necesarios para evitar que un propietario 
 
 ### Prueba de funcionamiento
 
+![ejercicio6-captura1-t_historial_cargos1](Capturas/Ejercicio6/captura1-t_historial_cargos1.PNG)
+
+![ejercicio6-captura2-t_historial_cargos2](Capturas/Ejercicio6/captura2-t_historial_cargos2.PNG)
+
+![ejercicio6-captura3-inserts-3v-1x](Capturas/Ejercicio6/captura3-inserts-3v-1x.PNG)
+
+![ejercicio6-captura4-update-x](Capturas/Ejercicio6/captura4-update-x.PNG)
+
+![ejercicio6-captura5-update-v](Capturas/Ejercicio6/captura5-update-v.PNG)
+
+
 
 ## Ejercicio 7
 
 Realiza los módulos de programación necesarios para evitar que un administrador gestione más de cuatro comunidades de forma simultánea.
 
 ### Prueba de funcionamiento
+
+![ejercicio7-captura1-t_contratos_de_mandato](Capturas/Ejercicio7/captura1-t_contratos_de_mandato.PNG)
+
+![ejercicio7-captura2-inserts-4v-1x](Capturas/Ejercicio7/captura2-inserts-4v-1x.PNG)
+
+![ejercicio7-captura3-update-x](Capturas/Ejercicio7/captura3-update-x.PNG)
+
+![ejercicio7-captura4-update-v](Capturas/Ejercicio7/captura4-update-v.PNG)
 
 
 ## Ejercicio 8
