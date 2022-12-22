@@ -92,6 +92,24 @@ INSERT INTO horarios_apertura VALUES('AAAA1','0002','Lunes',TO_DATE('08:00','HH2
 - Luego se ha hecho un select de la tabla CONTRATOS_DE_MANDATO para comprobar que el registro se ha insertado correctamente.
 ![Imagen](capturas/ejercicio3-postgre-prueba3.png)
 
+# Enunciado Ejercicio 5 hecho en PostgreSQL:
+## Añade una columna ImportePendiente en la tabla Propietarios y rellénalo con la suma de los importes de los recibos pendientes de pago de cada propietario. Realiza los módulos de programación necesarios para que los datos de la columna sean siempre coherentes con los datos que se encuentran en la tabla Recibos.
+
+## Prueba de funcionamiento de Trigger.
+- En este caso insertaré algunos registros en la tabla recibos_cuotas, seleccionando el valor del campo "Pagado" a "No" y añadiendo el DNI de algún propietario que tenga el valor 0 en la columna "ImportePendiente" en este caso (Luisa):
+
+- Insercción de datos.
+```sql
+INSERT INTO recibos_cuotas VALUES('0020','AAAA1','K6022994B',TO_DATE('2016/02/15','YYYY/MM/DD')::date,30,'No');
+INSERT INTO recibos_cuotas VALUES('0021','AAAA1','K6022994B',TO_DATE('2016/02/15','YYYY/MM/DD')::date,30,'No');
+```
+![Imagen](capturas/ejercicio5-postgre-prueba.png)
+
+- Realizamos la siguiente consulta y podremos ver como Luisa tiene el valor 50 en la columna "ImportePendiente".
+```sql
+select nombre, dni, importependiente from propietarios where dni='K6022994B';
+```
+![Imagen](capturas/ejercicio5-postgre-prueba2.png)
 
 # Enunciado Ejercicio 8:
 ## Realiza los módulos de programación necesarios para evitar que se emitan dos recibos a un mismo propietario en menos de 30 días.
